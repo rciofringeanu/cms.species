@@ -30,12 +30,6 @@ module_load_include('module', 'cms');
 function species_menu() {
     $items = array();
 
-    $items['species/export_range_states'] = array(
-        'page callback' => 'species_export_range_states',
-        'access arguments' => array('access content'),
-        'type' => MENU_CALLBACK,
-    );
-
     $items['species/%/%/%'] = array(
         'page callback' => 'species_ajax',
         'page arguments' => array(1, 2, 3, 4),
@@ -96,69 +90,6 @@ function species_menu() {
     );
 
     return $items;
-}
-
-function species_export_range_states() {
-    set_time_limit(3600);
-    $nodes = node_load_multiple(array(), array('type' => 'species'));
-
-    $data = array();
-    foreach ($nodes as $node) {
-        $data[$node->title] = array();
-
-        if (!empty($node->field_species_range_states[$node->language])) {
-            foreach($node->field_species_range_states[$node->language] as $row) {
-                $fc = entity_load('field_collection_item', array($row['value']));
-                reset($fc);
-                $fc = current($fc);
-                $id = CMSSpecies::get_field_single_target_id($fc, 'field_species_range_state');
-                if(!empty($id)) {
-                    $range_state = node_load($id);
-                    if(!empty($range_state)) {
-                        $data[$node->title][] = $range_state->title;
-                    }
-                }
-            }
-        }
-    }
-
-    drupal_add_http_header('Pragma', 'public');
-    drupal_add_http_header('Expires', '0');
-    drupal_add_http_header('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
-    drupal_add_http_header('Content-Description', 'File transfer');
-    drupal_add_http_header('Content-Type', 'text/csv; charset=utf-8');
-    drupal_add_http_header('Content-Disposition', 'attachment; filename=species_range_states.csv');
-    drupal_add_http_header('Content-Transfer-Encoding', 'binary');
-    $fp = fopen('php://output', 'w');
-
-    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-
-    $headers = array(
-        'Species',
-        'Range states',
-    );
-    fputcsv($fp, $headers);
-
-    foreach ($data as $species => $range_states) {
-        foreach ($range_states as $index => $country) {
-            if ($index == 0) {
-                $csv_data = array(
-                    $species,
-                    $country,
-                );
-            }else {
-                $csv_data = array(
-                    '',
-                    $country,
-                );
-            }
-
-            fputcsv($fp, $csv_data);
-        }
-    }
-
-    fclose($fp);
-    drupal_exit();
 }
 
 /**
