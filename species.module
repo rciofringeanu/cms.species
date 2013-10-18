@@ -179,13 +179,13 @@ function species_form_alter(&$form, &$form_state, $form_id) {
             $node =  $form['#node'];
             $default_value = array();
             $experts_options = array();
-            if (property_exists($node, 'field_species_experts') && array_key_exists($node->language, $node->field_species_experts)) {
-                foreach ($node->field_species_experts[$node->language] as $index => $expert) {
-                    $default_value[] = $expert['value'];
-                }
-            }
-            $experts_options = CMSContacts::get_contacts();
-            asort($experts_options);
+            #if (property_exists($node, 'field_species_experts') && array_key_exists($node->language, $node->field_species_experts)) {
+            #    foreach ($node->field_species_experts[$node->language] as $index => $expert) {
+            #        $default_value[] = $expert['value'];
+            #    }
+            #}
+            #$experts_options = CMSContacts::get_contacts();
+            #asort($experts_options);
 
             $form['field_species_experts'] = array(
                 '#type' => 'select',
@@ -350,7 +350,7 @@ function species_node_presave($node) {
 
 function species_node_insert($node) {
     if ($node->type == 'species') {
-        CMSSpecies::update_content_relation($node, CMSSpecies::$related_fields, CMSSpecies::$bundle);
+        CMSSpecies::update_content_relation($node, CMSSpecies::$related_fields, CMSSpecies::$bundle, CMSSpecies::$false_related_fields);
     }
 }
 
@@ -557,16 +557,6 @@ function species_entity_view($entity, $type, $view_mode, $langcode){
     }
 
     $node = node_load($entity->nid);
-    if (node_is_page($node)) {
-        $fields = CMSSpecies::$related_fields;
-        foreach ($fields as $related_content => $field) {
-             if (!empty($node->{$field}) && isset($node->{$field}[$node->language])) {
-                $content = $entity->content[$field]['#items'];
-                $published_contents = CMSUtils::get_published_content($content);
-                $entity->content[$field]['#items'] = $published_contents;
-             }
-         }
-    }
 
     // Inject the projects into the country profile page
     switch($entity->type) {
@@ -786,6 +776,28 @@ function species_node_load($nodes, $types) {
                     );
                 }
                 break;
+            case CMSSpecies::$bundle:
+                // Filter out the unpublished nodes from the related content
+                if (arg(0) == 'node' && is_numeric(arg(1)) && arg(1)==$node->nid) {
+                    $fields = CMSSpecies::$related_fields;
+                    foreach ($fields as $related_content => $field) {
+                         if (!empty($node->{$field}) && isset($node->{$field}[$node->language])) {
+                            $content = $node->{$field}[$node->language];
+                            $published_contents = CMSUtils::get_published_nodes($content);
+                            $node->{$field}[$node->language] = $published_contents;
+                         }
+                    }
+                    $fields = CMSSpecies::$false_related_fields;
+                    foreach ($fields as $field_related => $type) {
+                         if (!empty($node->{$field_related}) && isset($node->{$field_related}[$node->language])) {
+                            $content = $node->{$field_related}[$node->language];
+                            $published_contents = CMSUtils::get_published_nodes($content);
+                            $node->{$field_related}[$node->language] = $published_contents;
+                         }
+                    }
+                }
+                break;
+                
             default: break;
         }
     }
@@ -897,6 +909,7 @@ class CMSSpecies extends CMSBase {
                 reset($fc); $fc = current($fc);
                 $fc_array['field_species_range_state'] =  self::get_field_country_code($fc, 'field_species_range_state');
                 self::get_field_single_value($fc, 'field_species_territories', $fc_array);
+                self::get_field_single_value($fc, 'field_species_range_state_status', $fc_array);
                 $ret['field_species_range_states'][] = $fc_array;
             }
         }
@@ -1020,6 +1033,9 @@ class CMSSpecies extends CMSBase {
         foreach(self::$related_fields as $field_name) {
             $ret[$field_name] = self::get_entity_reference_by_uuid($node, $field_name);
         }
+        foreach(self::$false_related_fields as $field_name => $type) {
+            $ret[$field_name] = self::get_entity_reference_by_uuid($node, $field_name);
+        }
 
         return $ret;
     }
@@ -1040,11 +1056,11 @@ class CMSSpecies extends CMSBase {
             $species = json_decode($species, TRUE);
         }
         $node = CMSSpecies::node_create($species['title'], FALSE);
-        if (!empty($data['uuid'])) {
-            $node->uuid = $data['uuid'];
+        if (!empty($species['uuid'])) {
+            $node->uuid = $species['uuid'];
         }
-        if (!empty($data['status'])) {
-            $node->status = $data['status'];
+        if (isset($species['status']) && in_array($species['status'],array(0,1))) {
+            $node->status = $species['status'];
         }
         $parts = explode(' ', $species['title']);
         if (!isset($species['field_species_genus']) && !isset($species['field_species_species'])) {
@@ -1105,6 +1121,9 @@ class CMSSpecies extends CMSBase {
         //CMSSpecies::set_species_aewa_population_status($node, $species, $save);
 
         foreach(self::$related_fields as $field_name) {
+            self::set_entity_reference_by_uuid($node, $field_name, $species);
+        }
+        foreach(self::$false_related_fields as $field_name => $type) {
             self::set_entity_reference_by_uuid($node, $field_name, $species);
         }
 
@@ -1293,7 +1312,16 @@ class CMSSpecies extends CMSBase {
 
     public static function set_pop_global_date(&$node, $data) {
         if ($data['field_species_pop_global_date'] != "1970") {
-            $value = !empty($data['field_species_pop_global_date']) ? sprintf('%s-01-01T00:00:00', $data['field_species_pop_global_date']) : NULL;
+            if(!empty($data['field_species_pop_global_date'])) {
+                if(strtotime($data['field_species_pop_global_date'])) {
+                    $value=$data['field_species_pop_global_date'];
+                }else {
+                    $value = sprintf('%s-01-01T00:00:00', $data['field_species_pop_global_date']);                    
+                }
+                
+            } else {
+                $value=NULL;
+            }
             self::set_field_single_value($node, 'field_species_pop_global_date', array('field_species_pop_global_date' => $value));
         }
     }
@@ -1456,9 +1484,17 @@ class CMSSpecies extends CMSBase {
                         if (!empty($country['field_species_territories'])) {
                             $c['field_species_territories'][$node->language][0]['value'] = $country['field_species_territories'];
                         }
-
+                       
+                        if (isset($country['field_species_range_state_status'])){
+                            $field=field_info_field('field_species_range_state_status');
+                            $allowed_val = list_allowed_values($field);
+                            if (is_array($allowed_val) && array_key_exists($country['field_species_range_state_status'], $allowed_val)) {
+                                $c['field_species_range_state_status'][$node->language][0]['value'] = $country['field_species_range_state_status'];
+                            }
+                        }
                         $entity = entity_create('field_collection_item', $c);
                         $entity->setHostEntity('node', $node);
+                        
                     }else {
                         $node->field_species_range_states[$node->language][$index]['field_species_range_state'] = $country_ob->title;
                         $node->field_species_range_states[$node->language][$index]['field_species_territories'] = $country['field_species_territories'];
