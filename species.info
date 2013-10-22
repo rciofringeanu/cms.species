@@ -6,8 +6,6 @@ php = 5.2.4
 version = 7.x-2.0-alpha2
 project = species
 
-dependencies[] = cms
-
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = entityreference
