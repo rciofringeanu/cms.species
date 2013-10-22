@@ -6,6 +6,13 @@ php = 5.2.4
 version = 7.x-2.0-alpha2
 project = species
 
+dependencies[] = legal_instrument
+dependencies[] = species
+dependencies[] = document
+dependencies[] = meeting
+dependencies[] = project
+dependencies[] = publication
+
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = entityreference
