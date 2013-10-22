@@ -7,7 +7,6 @@ version = 7.x-2.0-alpha2
 project = species
 
 dependencies[] = legal_instrument
-dependencies[] = species
 dependencies[] = document
 dependencies[] = meeting
 dependencies[] = project
