@@ -6,10 +6,7 @@ php = 5.2.4
 version = 7.x-2.0-alpha2
 
 dependencies[] = legal_instrument
-dependencies[] = document
-dependencies[] = meeting
-dependencies[] = project
-dependencies[] = publication
+dependencies[] = country
 
 dependencies[] = ctools
 dependencies[] = date
