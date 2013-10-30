@@ -58,9 +58,9 @@ function species_menu() {
         'type' => MENU_CALLBACK,
     );
 
-    $items['family/species'] = array(
+    $items['manage/family/species'] = array(
         'page callback' => 'species_family_display',
-        'page arguments' => array(),
+        'page arguments' => array(4),
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
     );
@@ -508,14 +508,12 @@ function species_ajax_families_callback() {
 /**
  * Species family display page.
 */
-function species_family_display() {
+function species_family_display($nid) {
     global $user;
 
     $current_profile = CMSUtils::get_current_profile();
-    $args = arg();
 
-    if (count($args) == 3 && ($user->uid)) {
-        $nid = $args[2];
+    if ($nid && $user->uid) {
         if (!is_numeric($nid)) {
             drupal_not_found();
             drupal_exit();
@@ -803,7 +801,7 @@ function species_node_load($nodes, $types) {
                     }
                 }
                 break;
-                
+
             default: break;
         }
     }
@@ -1322,9 +1320,9 @@ class CMSSpecies extends CMSBase {
                 if(strtotime($data['field_species_pop_global_date'])) {
                     $value=$data['field_species_pop_global_date'];
                 }else {
-                    $value = sprintf('%s-01-01T00:00:00', $data['field_species_pop_global_date']);                    
+                    $value = sprintf('%s-01-01T00:00:00', $data['field_species_pop_global_date']);
                 }
-                
+
             } else {
                 $value=NULL;
             }
@@ -1490,7 +1488,7 @@ class CMSSpecies extends CMSBase {
                         if (!empty($country['field_species_territories'])) {
                             $c['field_species_territories'][$node->language][0]['value'] = $country['field_species_territories'];
                         }
-                       
+
                         if (isset($country['field_species_range_state_status'])){
                             $field=field_info_field('field_species_range_state_status');
                             $allowed_val = list_allowed_values($field);
@@ -1500,7 +1498,7 @@ class CMSSpecies extends CMSBase {
                         }
                         $entity = entity_create('field_collection_item', $c);
                         $entity->setHostEntity('node', $node);
-                        
+
                     }else {
                         $node->field_species_range_states[$node->language][$index]['field_species_range_state'] = $country_ob->title;
                         $node->field_species_range_states[$node->language][$index]['field_species_territories'] = $country['field_species_territories'];
