@@ -1,6 +1,6 @@
 <?php
 
-module_load_include('module', 'species', 'cms_species');
+module_load_include('module', 'cms_species', 'cms_species');
 module_load_include('php', 'cms', 'utils');
 
 function _get_species_by_title($species, $title) {

@@ -1,7 +1,7 @@
 <?php
 
 module_load_include('php', 'cms', 'utils');
-module_load_include('inc', 'species', 'cms_species.updates');
+module_load_include('inc', 'cms_species', 'cms_species.updates');
 
 /**
  * Implements hook_uninstall()

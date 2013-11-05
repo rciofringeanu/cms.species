@@ -10,9 +10,9 @@ include_once 'cms_species.features.inc';
  * @file
  * Code for the Species feature.
  */
-module_load_include('inc', 'species', 'cms_species.features');
-module_load_include('cron', 'species', 'cms_species');
-module_load_include('inc', 'species', 'cms_species.api');
+module_load_include('inc', 'cms_species', 'cms_species.features');
+module_load_include('cron', 'cms_species', 'cms_species');
+module_load_include('inc', 'cms_species', 'cms_species.api');
 module_load_include('php', 'cms', 'utils');
 
 define('ROLE_MANAGE_SPECIES', 'manage species');
@@ -37,7 +37,7 @@ function cms_species_menu() {
     $items = array();
 
     $items['species/%/%/%'] = array(
-        'page callback' => 'species_ajax',
+        'page callback' => 'cms_species_ajax',
         'page arguments' => array(1, 2, 3, 4),
         'access arguments' => array('edit any species content'),
         'type' => MENU_CALLBACK,
@@ -59,21 +59,21 @@ function cms_species_menu() {
     );
 
     $items['manage/family/species'] = array(
-        'page callback' => 'species_family_display',
+        'page callback' => 'cms_species_family_display',
         'page arguments' => array(4),
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
     );
 
     $items['ajax/species/orders'] = array(
-        'page callback' => 'species_ajax_orders_callback',
+        'page callback' => 'cms_species_ajax_orders_callback',
         'page arguments' => array(),
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
     );
 
     $items['ajax/species/families'] = array(
-        'page callback' => 'species_ajax_families_callback',
+        'page callback' => 'cms_species_ajax_families_callback',
         'page arguments' => array(),
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
@@ -88,7 +88,7 @@ function cms_species_menu() {
     );
 
     $items['species/list/%'] = array(
-        'page callback' => 'species_list_from_cache',
+        'page callback' => 'cms_species_list_from_cache',
         'page arguments' => array(2),
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
@@ -203,7 +203,7 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
             /**
              * Callback function to manipulate field_species_experts data before DB insert
             */
-            $form['#submit'][] = 'species_alter_experts_submit';
+            $form['#submit'][] = 'cms_species_alter_experts_submit';
 
             $breadcrumb = array();
             $breadcrumb[] = l(t('Home'), '<front>');
