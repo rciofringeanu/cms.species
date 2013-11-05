@@ -1,4 +1,4 @@
-name = Species
+name = "CMS Species"
 description = Provides structure for Species
 core = 7.x
 package = CMS
