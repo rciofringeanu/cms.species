@@ -7,7 +7,7 @@
 /**
  * Implements hook_field_default_field_instances().
  */
-function species_field_default_field_instances() {
+function cms_species_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance: 'field_collection_item-field_aewa_pop_status_col_a-field_pop_status_col_a_hunting'

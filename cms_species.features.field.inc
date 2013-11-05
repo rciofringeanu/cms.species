@@ -7,7 +7,7 @@
 /**
  * Implements hook_field_default_fields().
  */
-function species_field_default_fields() {
+function cms_species_field_default_fields() {
   $fields = array();
 
   // Exported field: 'field_collection_item-field_aewa_pop_status_col_a-field_pop_status_col_a_hunting'.

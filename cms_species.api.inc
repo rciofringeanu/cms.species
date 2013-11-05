@@ -5,7 +5,7 @@
  *
  * Create an associative array with species UUIDs and title
 */
-function species_list_from_cache($website) {
+function cms_species_list_from_cache($website) {
     global $user;
     $response = array();
     $species = array();
@@ -65,7 +65,7 @@ function api_species_list($type, $profile = '') {
     }
 }
 
-function species_remote_options($data = '', $species_options = array(), $website = '', $websites_list = array()) {
+function cms_species_remote_options($data = '', $species_options = array(), $website = '', $websites_list = array()) {
     if (is_array($data) && isset($websites_list[$website])) {
         $remote_website_data = $websites_list[$website];
         foreach ($data as $uuid => $species) {

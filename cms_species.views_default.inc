@@ -7,7 +7,7 @@
 /**
  * Implements hook_views_default_views().
  */
-function species_views_default_views() {
+function cms_species_views_default_views() {
   $export = array();
 
   $view = new view();

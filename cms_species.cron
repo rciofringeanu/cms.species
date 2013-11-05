@@ -5,7 +5,7 @@ define('SPECIES_CACHE_FILENAME', 'species.json');
 /**
  * Implementation of hook_cron_queue_info()
  */
-function species_cron_queue_info() {
+function cms_species_cron_queue_info() {
     $websites = CMSUtils::get_all_websites();
     $queues = array();
     foreach ($websites as $website_id => $website) {
@@ -21,7 +21,7 @@ function species_cron_queue_info() {
 /**
  * Implementation of hook_cron()
  */
-function species_cron() {
+function cms_species_cron() {
     $websites = CMSUtils::get_all_websites();
 
     // Put everything in a queue for processing.

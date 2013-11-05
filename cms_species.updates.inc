@@ -1,6 +1,6 @@
 <?php
 
-module_load_include('module', 'species', 'species');
+module_load_include('module', 'species', 'cms_species');
 module_load_include('php', 'cms', 'utils');
 
 function _get_species_by_title($species, $title) {
@@ -16,7 +16,7 @@ function _get_species_by_title($species, $title) {
 /**
  * Update Species nodes with 'Genus', 'Species' data and fix their appendix dates
 */
-function species_update_7004() {
+function cms_species_update_7004() {
     $initial_data_path = drupal_get_path('module', 'cms_initial_data');
 
     $JSON_file = $initial_data_path . DIRECTORY_SEPARATOR .
@@ -79,7 +79,7 @@ function species_update_7004() {
     }
 }
 
-function species_update_7007() {
+function cms_species_update_7007() {
     $role = CMSUtils::get_or_create_role(ROLE_MANAGE_SPECIES);
     $rid = $role->rid;
 
@@ -108,7 +108,7 @@ function species_update_7007() {
 /**
  * Update Species instruments
 */
-function species_update_7028() {
+function cms_species_update_7028() {
     $JSON_file = drupal_get_path('module', 'cms_initial_data') . '/' . CMSUtils::get_current_profile() . '/species/species.json';
     $f = fopen($JSON_file, 'r');
     $JSON_data = fread($f, filesize($JSON_file));
@@ -135,7 +135,7 @@ function species_update_7028() {
     return t('Species instruments updated');
 }
 
-function species_update_7015() {
+function cms_species_update_7015() {
     $current_profile = CMSUtils::get_current_profile();
     if ($current_profile != 'aewa') {
         return t('Update script not supported!');
@@ -161,7 +161,7 @@ function species_update_7015() {
     return t('Species population updated');
 }
 
-function species_update_7017() {
+function cms_species_update_7017() {
     $JSON_file = drupal_get_path('module', 'cms_initial_data') . '/' . CMSUtils::get_current_profile() . '/species/species.json';
 
     /**
@@ -206,7 +206,7 @@ function species_update_7017() {
 /**
  * Update species IUCN data
 */
-function species_update_7018() {
+function cms_species_update_7018() {
     $species = node_load_multiple(array(), array('type' => 'species'));
     foreach($species as $node) {
         $data = CMSSpecies::get_species_iucn_data($node->title);
@@ -222,7 +222,7 @@ function species_update_7018() {
 /**
  * Update Species common name from 'S to 's
 */
-function species_update_7029() {
+function cms_species_update_7029() {
     $species = node_load_multiple(array(), array('type' => 'species'));
     foreach ($species as $node) {
         $common_name = $node->field_species_name_en[$node->language][0]['value'];
@@ -248,7 +248,7 @@ function species_update_7029() {
 /**
  * Import data for AEWA Species status vocabularies
 */
-function species_update_7026() {
+function cms_species_update_7026() {
     $current_profile = CMSUtils::get_current_profile();
     if ($current_profile != 'aewa') {
         return t('Update script not supported!');
@@ -285,7 +285,7 @@ function species_update_7026() {
 /**
  * Update species authors and standard references
 */
-function species_update_7031() {
+function cms_species_update_7031() {
     $initial_data_path = drupal_get_path('module', 'cms_initial_data');
 
     $JSON_file = $initial_data_path . '/' . CMSUtils::get_current_profile() . '/species/updates/' . 'authors.json';
@@ -313,7 +313,7 @@ function species_update_7031() {
 /**
  * Update species appendices
 */
-function species_update_7032() {
+function cms_species_update_7032() {
     $initial_data_path = drupal_get_path('module', 'cms_initial_data');
 
     $JSON_file = $initial_data_path . '/' . CMSUtils::get_current_profile() . '/species/updates/' . 'app.json';
@@ -368,7 +368,7 @@ function species_update_7032() {
 /**
  * Update species range states
 */
-function species_update_7033() {
+function cms_species_update_7033() {
     $initial_data_path = drupal_get_path('module', 'cms_initial_data');
 
     $JSON_file = $initial_data_path . '/' . CMSUtils::get_current_profile() . '/species/updates/' . 'range_states.json';

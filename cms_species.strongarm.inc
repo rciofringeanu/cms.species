@@ -7,7 +7,7 @@
 /**
  * Implements hook_strongarm().
  */
-function species_strongarm() {
+function cms_species_strongarm() {
   $export = array();
 
   $strongarm = new stdClass();
