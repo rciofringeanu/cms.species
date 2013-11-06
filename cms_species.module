@@ -174,9 +174,9 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
                 }
 
                 if (array_key_exists('field_species_range_states', $form)) {
-                    foreach ($form['field_species_range_states'][$node->language] as $index => $value) {
+                    foreach ($form['field_species_range_states'][$langcode] as $index => $value) {
                         if (is_numeric($index)){
-                            unset($form['field_species_range_states'][$node->language][$index]['field_species_range_state_status']);
+                            unset($form['field_species_range_states'][$langcode][$index]['field_species_range_state_status']);
                         }
                     }
                 }
