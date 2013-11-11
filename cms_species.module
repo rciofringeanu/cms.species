@@ -27,6 +27,9 @@ define('VOC_SPECIES_AEWA_STATUS_C', 'aewa_status_column_c');
 
 module_load_include('module', 'cms');
 
+/**
+ * Implements hook_menu();
+*/
 function cms_species_menu() {
     $items = array();
 
@@ -286,10 +289,23 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
     return $form;
 }
 
+/**
+ * Set form redirect path after a species has been deleted
+ *
+ * @param   array   $form
+ * @param   array   $form_state
+*/
 function _species_redirect_after_delete(&$form, &$form_state) {
     $form_state['redirect'] = 'species/listing';
 }
 
+/**
+ * Alter species experts field submit callback to save only 'uid' attribute
+ * of an LDAP entry
+ *
+ * @param   array   $form
+ * @param   array   $form_state
+*/
 function cms_species_alter_experts_submit(&$form, &$form_state) {
     $values = $form_state['values'];
     $language = $values['language'];
@@ -356,12 +372,26 @@ function cms_species_node_presave($node) {
     }
 }
 
+/**
+ * Implements hook_node_insert();
+ *
+ * Update related species content types with species node->nid
+ *
+ * @param   stdClass    $node
+*/
 function cms_species_node_insert($node) {
     if ($node->type == 'species') {
         CMSSpecies::update_content_relation($node, CMSSpecies::$related_fields, CMSSpecies::$bundle, CMSSpecies::$false_related_fields);
     }
 }
 
+/**
+ * Implements hook_views_default_views_alter();
+ *
+ * @param   stdClass    $views
+ *
+ * @return  stdClass    $views
+*/
 function cms_species_views_default_views_alter(&$views) {
     if (isset($views['species_admin'])) {
         $handler = &$views['species_admin'];
