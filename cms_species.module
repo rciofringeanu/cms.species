@@ -29,7 +29,11 @@ module_load_include('module', 'cms');
 
 /**
  * Implements hook_menu();
-*/
+ *
+ * Define species specific menu items
+ *
+ * @return  array   $items
+ */
 function cms_species_menu() {
     $items = array();
 
@@ -93,6 +97,30 @@ function cms_species_menu() {
     );
 
     return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter();
+ *
+ * Show 'Create species' button on Species listing view
+ *
+ * @param   array   $data
+ * @param   array   $router_item
+ * @param   string  $root_path
+ */
+function cms_species_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+    switch($root_path){
+        case ADMINISTRATION_PATH . 'species/listing' :
+            $item = menu_get_item('node/add/species');
+            $item['title'] = t('Create ' . CMSSpecies::$bundle);
+            if ($item['access']) {
+                $data['actions']['output'][] = array(
+                    '#theme' => 'menu_local_action',
+                    '#link' => $item,
+                );
+            }
+            break;
+    }
 }
 
 /**
