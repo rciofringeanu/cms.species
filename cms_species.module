@@ -215,7 +215,7 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
             #        $default_value[] = $expert['value'];
             #    }
             #}
-            #$experts_options = CMSContacts::get_contacts();
+            #$experts_options = CMSContacts::get_mapped_contacts_names_uid();
             #asort($experts_options);
 
             $form['field_species_experts'] = array(
