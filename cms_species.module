@@ -61,7 +61,7 @@ function cms_species_menu() {
 
     $items['manage/family/species'] = array(
         'page callback' => 'cms_species_family_display',
-        'page arguments' => array(4),
+        'page arguments' => array(3),
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
     );
