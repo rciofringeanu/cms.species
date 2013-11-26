@@ -210,21 +210,21 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
             $node =  $form['#node'];
             $default_value = array();
             $experts_options = array();
-            if (property_exists($node, 'field_species_experts') && array_key_exists($node->language, $node->field_species_experts)) {
-                foreach ($node->field_species_experts[$node->language] as $index => $expert) {
-                    $default_value[] = $expert['value'];
-                }
-            }
-            $experts_options = CMSContacts::get_mapped_contacts_names_uid();
-            asort($experts_options);
-
-            $form['field_species_experts'] = array(
-                '#type' => 'select',
-                '#title' => t('Experts'),
-                '#multiple' => TRUE,
-                '#options' => $experts_options,
-                '#default_value' => $default_value,
-            );
+//            if (property_exists($node, 'field_species_experts') && array_key_exists($node->language, $node->field_species_experts)) {
+//                foreach ($node->field_species_experts[$node->language] as $index => $expert) {
+//                    $default_value[] = $expert['value'];
+//                }
+//            }
+//            $experts_options = CMSContacts::get_mapped_contacts_names_uid();
+//            asort($experts_options);
+//
+//            $form['field_species_experts'] = array(
+//                '#type' => 'select',
+//                '#title' => t('Experts'),
+//                '#multiple' => TRUE,
+//                '#options' => $experts_options,
+//                '#default_value' => $default_value,
+//            );
             /**
              * Callback function to manipulate field_species_experts data before DB insert
              */
@@ -739,7 +739,7 @@ function get_species() {
                 unlink($cookie_file);
 
                 $species_data = json_decode($JSON_species, true);
-                $images = $species_data->field_species_images;
+                $images = $species_data['field_species_images'];
                 $species_data['field_species_images'] = array(); // Do not import image (stored on remote instance)
                 $node = CMSSpecies::node_from_array($species_data, FALSE, FALSE);
                 $view = node_view($node);
