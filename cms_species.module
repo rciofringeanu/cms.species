@@ -210,13 +210,13 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
             $node =  $form['#node'];
             $default_value = array();
             $experts_options = array();
-            #if (property_exists($node, 'field_species_experts') && array_key_exists($node->language, $node->field_species_experts)) {
-            #    foreach ($node->field_species_experts[$node->language] as $index => $expert) {
-            #        $default_value[] = $expert['value'];
-            #    }
-            #}
-            #$experts_options = CMSContacts::get_mapped_contacts_names_uid();
-            #asort($experts_options);
+            if (property_exists($node, 'field_species_experts') && array_key_exists($node->language, $node->field_species_experts)) {
+                foreach ($node->field_species_experts[$node->language] as $index => $expert) {
+                    $default_value[] = $expert['value'];
+                }
+            }
+            $experts_options = CMSContacts::get_mapped_contacts_names_uid();
+            asort($experts_options);
 
             $form['field_species_experts'] = array(
                 '#type' => 'select',
