@@ -942,6 +942,7 @@ class CMSSpecies extends CMSBase {
         }
         $ret = array(
             'title' => $node->title,
+            'nid' => $node->nid,
             'status' => $node->status,
             'uuid' => CMSUtils::get_node_uuid($node)
         );
@@ -1127,6 +1128,9 @@ class CMSSpecies extends CMSBase {
             $species = json_decode($species, TRUE);
         }
         $node = CMSSpecies::node_create($species['title'], FALSE);
+        if (!empty($species['nid'])) {
+            $node->nid = $species['nid'];
+        }
         if (!empty($species['uuid'])) {
             $node->uuid = $species['uuid'];
         }
