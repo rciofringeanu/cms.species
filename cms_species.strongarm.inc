@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * species.strongarm.inc
+ * cms_species.strongarm.inc
  */
 
 /**

@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * species.features.inc
+ * cms_species.features.inc
  */
 
 /**

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the CMS Species feature.
+ */
+
+include_once 'cms_species.features.inc';
 
 /**
  * @file
@@ -393,23 +399,6 @@ function cms_species_node_presave($node) {
                 $node->field_species_iucn_web_srv[$node->language][0]['value'] = $iucn_data['field_species_iucn_web_srv'];
             }
         }
-
-        if (property_exists($node, 'nid') && $node->nid && (!property_exists($node, 'content_relation') || $node->content_relation != FALSE)) {
-            CMSSpecies::update_content_relation($node, CMSSpecies::$related_fields, CMSSpecies::$bundle, CMSSpecies::$false_related_fields);
-        }
-    }
-}
-
-/**
- * Implements hook_node_insert();
- *
- * Update related species content types with species node->nid
- *
- * @param   stdClass    $node
-*/
-function cms_species_node_insert($node) {
-    if ($node->type == 'species') {
-        CMSSpecies::update_content_relation($node, CMSSpecies::$related_fields, CMSSpecies::$bundle, CMSSpecies::$false_related_fields);
     }
 }
 
@@ -476,13 +465,13 @@ function cms_species_node_view($node, $view_mode, $langcode) {
         curl_close($curl_handler);
 
         $node->experts = array();
-        if (isset($node->field_species_experts) && (!empty($node->field_species_experts))) {
-            $agent = CMSContacts::agent();
-            foreach ($node->field_species_experts[$node->language] as $expert) {
-                $contact = $agent->search_user($expert['value']);
-                $node->experts[] = $contact;
-            }
-        }
+//        if (isset($node->field_species_experts) && (!empty($node->field_species_experts))) {
+//            $agent = CMSContacts::agent();
+//            foreach ($node->field_species_experts[$node->language] as $expert) {
+//                $contact = $agent->search_user($expert['value']);
+//                $node->experts[] = $contact;
+//            }
+//        }
         if ($view_mode == 'full' && node_is_page($node)) {
             $breadcrumb = array();
             $breadcrumb[] = l(t('Home'), '<front>');
@@ -845,27 +834,6 @@ function cms_species_node_load($nodes, $types) {
                         'entity' => $row,
                         'access' => TRUE
                     );
-                }
-                break;
-            case CMSSpecies::$bundle:
-                // Filter out the unpublished nodes from the related content
-                if (arg(0) == 'node' && is_numeric(arg(1)) && arg(1)==$node->nid) {
-                    $fields = CMSSpecies::$related_fields;
-                    foreach ($fields as $related_content => $field) {
-                        if (!empty($node->{$field}) && isset($node->{$field}[$node->language])) {
-                            $content = $node->{$field}[$node->language];
-                            $published_contents = CMSUtils::get_published_nodes($content);
-                            $node->{$field}[$node->language] = $published_contents;
-                        }
-                    }
-                    $fields = CMSSpecies::$false_related_fields;
-                    foreach ($fields as $field_related => $type) {
-                        if (!empty($node->{$field_related}) && isset($node->{$field_related}[$node->language])) {
-                            $content = $node->{$field_related}[$node->language];
-                            $published_contents = CMSUtils::get_published_nodes($content);
-                            $node->{$field_related}[$node->language] = $published_contents;
-                        }
-                    }
                 }
                 break;
 

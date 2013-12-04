@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * species.views_default.inc
+ * cms_species.views_default.inc
  */
 
 /**
@@ -347,8 +347,8 @@ function cms_species_views_default_views() {
   $handler->display->display_options['filters']['field_species_instrument_target_id']['expose']['operator'] = 'field_species_instrument_target_id_op';
   $handler->display->display_options['filters']['field_species_instrument_target_id']['expose']['identifier'] = 'field_species_instrument_target_id';
 
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'species_listing');
+  /* Display: Species listing */
+  $handler = $view->new_display('page', 'Species listing', 'species_listing');
   $handler->display->display_options['path'] = 'manage/species/listing';
   $handler->display->display_options['menu']['title'] = 'Scientific name';
   $handler->display->display_options['menu']['weight'] = '0';
@@ -364,6 +364,928 @@ function cms_species_views_default_views() {
   $handler->display->display_options['style_options']['filename'] = 'species.xls';
   $handler->display->display_options['style_options']['parent_sort'] = 0;
   $handler->display->display_options['path'] = 'species/export';
+
+  /* Display: Publication's species */
+  $handler = $view->new_display('page', 'Publication\'s species', 'publication_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Publication species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_publication_target_id']['id'] = 'field_species_publication_target_id';
+  $handler->display->display_options['relationships']['field_species_publication_target_id']['table'] = 'field_data_field_species_publication';
+  $handler->display->display_options['relationships']['field_species_publication_target_id']['field'] = 'field_species_publication_target_id';
+  $handler->display->display_options['relationships']['field_species_publication_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_publication_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'publication_species/%';
+
+  /* Display: Instrument species */
+  $handler = $view->new_display('page', 'Instrument species', 'instrument_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Instrument species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Content: CMS Instruments (field_species_instruments) */
+  $handler->display->display_options['relationships']['field_species_instruments_value']['id'] = 'field_species_instruments_value';
+  $handler->display->display_options['relationships']['field_species_instruments_value']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['relationships']['field_species_instruments_value']['field'] = 'field_species_instruments_value';
+  $handler->display->display_options['relationships']['field_species_instruments_value']['required'] = TRUE;
+  $handler->display->display_options['relationships']['field_species_instruments_value']['delta'] = '-1';
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_instrument_target_id']['id'] = 'field_species_instrument_target_id';
+  $handler->display->display_options['relationships']['field_species_instrument_target_id']['table'] = 'field_data_field_species_instrument';
+  $handler->display->display_options['relationships']['field_species_instrument_target_id']['field'] = 'field_species_instrument_target_id';
+  $handler->display->display_options['relationships']['field_species_instrument_target_id']['relationship'] = 'field_species_instruments_value';
+  $handler->display->display_options['relationships']['field_species_instrument_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_instrument_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'instrument_species/%';
+
+  /* Display: Country species */
+  $handler = $view->new_display('page', 'Country species', 'country_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Country species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+    'field_species_class' => 'field_species_class',
+    'field_species_order' => 'field_species_order',
+    'field_species_family' => 'field_species_family',
+    'field_species_instruments' => 'field_species_instruments',
+    'field_species_appendix_1_date' => 'field_species_appendix_1_date',
+    'field_species_appendix_2_date' => 'field_species_appendix_2_date',
+    'field_species_appendix_1_date_1' => 'field_species_appendix_1_date_1',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_class' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_order' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_family' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_instruments' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_appendix_1_date' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_appendix_2_date' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_appendix_1_date_1' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Content: Range states (field_species_range_states) */
+  $handler->display->display_options['relationships']['field_species_range_states_value']['id'] = 'field_species_range_states_value';
+  $handler->display->display_options['relationships']['field_species_range_states_value']['table'] = 'field_data_field_species_range_states';
+  $handler->display->display_options['relationships']['field_species_range_states_value']['field'] = 'field_species_range_states_value';
+  $handler->display->display_options['relationships']['field_species_range_states_value']['required'] = TRUE;
+  $handler->display->display_options['relationships']['field_species_range_states_value']['delta'] = '-1';
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_range_state_target_id']['id'] = 'field_species_range_state_target_id';
+  $handler->display->display_options['relationships']['field_species_range_state_target_id']['table'] = 'field_data_field_species_range_state';
+  $handler->display->display_options['relationships']['field_species_range_state_target_id']['field'] = 'field_species_range_state_target_id';
+  $handler->display->display_options['relationships']['field_species_range_state_target_id']['relationship'] = 'field_species_range_states_value';
+  $handler->display->display_options['relationships']['field_species_range_state_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  /* Field: Content: CMS Instruments */
+  $handler->display->display_options['fields']['field_species_instruments']['id'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['field'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_species_instruments']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_species_instruments']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_species_instruments']['separator'] = '';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_range_state_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'country_species/%';
+
+  /* Display: Project species */
+  $handler = $view->new_display('page', 'Project species', 'project_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Project species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+    'field_species_instruments' => 'field_species_instruments',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_instruments' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_project_target_id']['id'] = 'field_species_project_target_id';
+  $handler->display->display_options['relationships']['field_species_project_target_id']['table'] = 'field_data_field_species_project';
+  $handler->display->display_options['relationships']['field_species_project_target_id']['field'] = 'field_species_project_target_id';
+  $handler->display->display_options['relationships']['field_species_project_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  /* Field: Content: CMS Instruments */
+  $handler->display->display_options['fields']['field_species_instruments']['id'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['field'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_species_instruments']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_species_instruments']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_species_instruments']['separator'] = '';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_project_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'project_species/%';
+
+  /* Display: Meetings species */
+  $handler = $view->new_display('page', 'Meetings species', 'meeting_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Meetings species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+    'field_species_instruments' => 'field_species_instruments',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_instruments' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_meeting_target_id']['id'] = 'field_species_meeting_target_id';
+  $handler->display->display_options['relationships']['field_species_meeting_target_id']['table'] = 'field_data_field_species_meeting';
+  $handler->display->display_options['relationships']['field_species_meeting_target_id']['field'] = 'field_species_meeting_target_id';
+  $handler->display->display_options['relationships']['field_species_meeting_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  /* Field: Content: CMS Instruments */
+  $handler->display->display_options['fields']['field_species_instruments']['id'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['field'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_species_instruments']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_species_instruments']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_species_instruments']['separator'] = '';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_meeting_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'meeting_species/%';
+
+  /* Display: Plan species */
+  $handler = $view->new_display('page', 'Plan species', 'plan_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Plan species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+    'field_species_instruments' => 'field_species_instruments',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_instruments' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_plans_target_id']['id'] = 'field_species_plans_target_id';
+  $handler->display->display_options['relationships']['field_species_plans_target_id']['table'] = 'field_data_field_species_plans';
+  $handler->display->display_options['relationships']['field_species_plans_target_id']['field'] = 'field_species_plans_target_id';
+  $handler->display->display_options['relationships']['field_species_plans_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  /* Field: Content: CMS Instruments */
+  $handler->display->display_options['fields']['field_species_instruments']['id'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['field'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_species_instruments']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_species_instruments']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_species_instruments']['separator'] = '';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_plans_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'plan_species/%';
+
+  /* Display: National report species */
+  $handler = $view->new_display('page', 'National report species', 'national_report_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'National report species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+    'field_species_instruments' => 'field_species_instruments',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_instruments' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_national_report_target_id']['id'] = 'field_species_national_report_target_id';
+  $handler->display->display_options['relationships']['field_species_national_report_target_id']['table'] = 'field_data_field_species_national_report';
+  $handler->display->display_options['relationships']['field_species_national_report_target_id']['field'] = 'field_species_national_report_target_id';
+  $handler->display->display_options['relationships']['field_species_national_report_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  /* Field: Content: CMS Instruments */
+  $handler->display->display_options['fields']['field_species_instruments']['id'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['field'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_species_instruments']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_species_instruments']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_species_instruments']['separator'] = '';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_national_report_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'national_report_species/%';
+
+  /* Display: Other document species */
+  $handler = $view->new_display('page', 'Other document species', 'other_document_species');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Other document species';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'title' => 'title',
+    'field_species_name_en' => 'field_species_name_en',
+    'field_species_instruments' => 'field_species_instruments',
+  );
+  $handler->display->display_options['style_options']['default'] = 'title';
+  $handler->display->display_options['style_options']['info'] = array(
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_name_en' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_species_instruments' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_species_document_target_id']['id'] = 'field_species_document_target_id';
+  $handler->display->display_options['relationships']['field_species_document_target_id']['table'] = 'field_data_field_species_document';
+  $handler->display->display_options['relationships']['field_species_document_target_id']['field'] = 'field_species_document_target_id';
+  $handler->display->display_options['relationships']['field_species_document_target_id']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Scientific name';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: English */
+  $handler->display->display_options['fields']['field_species_name_en']['id'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['table'] = 'field_data_field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['field'] = 'field_species_name_en';
+  $handler->display->display_options['fields']['field_species_name_en']['label'] = 'Common name';
+  $handler->display->display_options['fields']['field_species_name_en']['type'] = 'text_plain';
+  $handler->display->display_options['fields']['field_species_name_en']['settings'] = array(
+    'render_tr' => 1,
+    'render_link' => '0',
+  );
+  /* Field: Content: CMS Instruments */
+  $handler->display->display_options['fields']['field_species_instruments']['id'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['table'] = 'field_data_field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['field'] = 'field_species_instruments';
+  $handler->display->display_options['fields']['field_species_instruments']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_species_instruments']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_species_instruments']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_species_instruments']['separator'] = '';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_species_document_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['path'] = 'other_document_species/%';
+  $translatables['species_admin'] = array(
+    t('Master'),
+    t('Species'),
+    t('more'),
+    t('Search'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('There are no species matching the selected criteria'),
+    t('field collection item from field_species_instruments'),
+    t('term from field_species_class'),
+    t('term from field_species_order'),
+    t('term from field_species_family'),
+    t('species_instrument'),
+    t('Scientific name'),
+    t('Common name'),
+    t('Class'),
+    t('Order'),
+    t('Family'),
+    t('CMS Instruments'),
+    t('Appendix (App. I / App. II)'),
+    t('[field_species_appendix_1_date] / [field_species_appendix_2_date]'),
+    t('CMS Instrument'),
+    t('Species listing'),
+    t('Data export'),
+    t('Publication\'s species'),
+    t('Publication species'),
+    t('Content entity referenced from field_species_publication'),
+    t('All'),
+    t('Instrument species'),
+    t('Content entity referenced from field_species_instrument'),
+    t('Country species'),
+    t('field collection item from field_species_range_states'),
+    t('Content entity referenced from field_species_range_state'),
+    t('Project species'),
+    t('Content entity referenced from field_species_project'),
+    t('Meetings species'),
+    t('Content entity referenced from field_species_meeting'),
+    t('Plan species'),
+    t('Content entity referenced from field_species_plans'),
+    t('National report species'),
+    t('Content entity referenced from field_species_national_report'),
+    t('Other document species'),
+    t('Content entity referenced from field_species_document'),
+  );
   $export['species_admin'] = $view;
 
   return $export;
