@@ -781,7 +781,6 @@ function api_species_json($scientific_name) {
     drupal_exit();
 }
 
-
 /**
  * Implements hook_field_extra_fields()
  *
