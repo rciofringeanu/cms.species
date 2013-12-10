@@ -398,15 +398,6 @@ class API_SPECIES {
         )
     );
 
-    /*static $assesment = array(
-        "field_species_appendix_1_date"       => "appendix_1_date",
-        "field_species_appendix_2_date"       => "appendix_2_date",
-        "field_species_concerted_action"       => "concerted_action",
-        "field_species_cooperative_action"       => "cooperative_action",
-        "field_species_pop_global"       => "population_global_size",
-        "field_species_pop_global_date"       => "population_global_date",
-    );*/
-
 
     /**
      * Function to get an array with colelction-field's fields values
@@ -476,20 +467,36 @@ class API_SPECIES {
     }
 
 
+    /**
+     * Get an instrument array mapped as defined in documentation
+     * @param $nid
+     *
+     * @return array|bool
+     */
     static function get_instrument($nid) {
             $node = node_load($nid);
             if ($node == false) {
                 return FALSE;
             }
+            $instrument = array();
             $instrument['instrument'] = $node->title;
             $instrument['uuid'] = $node->uuid;
             return $instrument;
-        }
+    }
+
+    /**
+     * Get a country array mapped as defined in documentation
+     *
+     * @param $nid
+     *
+     * @return array|bool
+     */
     static function get_country($nid) {
         $node = node_load($nid);
         if ($node == false) {
             return FALSE;
         }
+        $country = array();
         $country['name'] = $node->title;
         $country['uuid'] = $node->uuid;
         $country['iso3l'] = $node->field_country_iso3[$node->language][0]['value'];
