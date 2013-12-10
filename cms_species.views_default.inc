@@ -24,7 +24,11 @@ function cms_species_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'API Species';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    3 => '3',
+    10 => '10',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -108,6 +112,7 @@ function cms_species_views_default_views() {
   $handler->display->display_options['filters']['uuid']['expose']['label'] = 'uuid';
   $handler->display->display_options['filters']['uuid']['expose']['operator'] = 'uuid_op';
   $handler->display->display_options['filters']['uuid']['expose']['identifier'] = 'uuid';
+  $handler->display->display_options['filters']['uuid']['expose']['required'] = TRUE;
   $handler->display->display_options['filters']['uuid']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
@@ -137,6 +142,43 @@ function cms_species_views_default_views() {
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  /* Filter criterion: Content: Nid */
+  $handler->display->display_options['filters']['nid']['id'] = 'nid';
+  $handler->display->display_options['filters']['nid']['table'] = 'node';
+  $handler->display->display_options['filters']['nid']['field'] = 'nid';
+  $handler->display->display_options['filters']['nid']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['nid']['expose']['operator_id'] = 'nid_op';
+  $handler->display->display_options['filters']['nid']['expose']['label'] = 'nid';
+  $handler->display->display_options['filters']['nid']['expose']['operator'] = 'nid_op';
+  $handler->display->display_options['filters']['nid']['expose']['identifier'] = 'nid';
+  $handler->display->display_options['filters']['nid']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+    6 => 0,
+    7 => 0,
+    8 => 0,
+    9 => 0,
+    10 => 0,
+  );
   $handler->display->display_options['path'] = 'species';
 
   /* Display: Node */
@@ -147,13 +189,6 @@ function cms_species_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -184,6 +219,15 @@ function cms_species_views_default_views() {
 return "";';
   $handler->display->display_options['fields']['php_2']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_2']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_5']['id'] = 'php_5';
+  $handler->display->display_options['fields']['php_5']['table'] = 'views';
+  $handler->display->display_options['fields']['php_5']['field'] = 'php';
+  $handler->display->display_options['fields']['php_5']['label'] = 'scientific_name';
+  $handler->display->display_options['fields']['php_5']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_5']['php_value'] = 'return $view->used_node->title;';
+  $handler->display->display_options['fields']['php_5']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_5']['php_click_sortable'] = '';
   /* Field: Global: PHP */
   $handler->display->display_options['fields']['php_7']['id'] = 'php_7';
   $handler->display->display_options['fields']['php_7']['table'] = 'views';
@@ -224,7 +268,7 @@ return "";';
   $handler->display->display_options['fields']['php_3']['id'] = 'php_3';
   $handler->display->display_options['fields']['php_3']['table'] = 'views';
   $handler->display->display_options['fields']['php_3']['field'] = 'php';
-  $handler->display->display_options['fields']['php_3']['label'] = 'population_size';
+  $handler->display->display_options['fields']['php_3']['label'] = 'population_size_trend';
   $handler->display->display_options['fields']['php_3']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php_3']['php_value'] = 'return api_species_pop_size($view->used_node);';
   $handler->display->display_options['fields']['php_3']['use_php_click_sortable'] = '0';
@@ -265,6 +309,60 @@ return "";';
   $handler->display->display_options['fields']['php_9']['php_value'] = 'return api_field_single_value(\'field_species_notes\', $view->used_node);';
   $handler->display->display_options['fields']['php_9']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_9']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_10']['id'] = 'php_10';
+  $handler->display->display_options['fields']['php_10']['table'] = 'views';
+  $handler->display->display_options['fields']['php_10']['field'] = 'php';
+  $handler->display->display_options['fields']['php_10']['label'] = 'appendix_1_date';
+  $handler->display->display_options['fields']['php_10']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_10']['php_value'] = 'return api_field_single_value(\'field_species_appendix_1_date\', $view->used_node);';
+  $handler->display->display_options['fields']['php_10']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_10']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_11']['id'] = 'php_11';
+  $handler->display->display_options['fields']['php_11']['table'] = 'views';
+  $handler->display->display_options['fields']['php_11']['field'] = 'php';
+  $handler->display->display_options['fields']['php_11']['label'] = 'appendix_2_date';
+  $handler->display->display_options['fields']['php_11']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_11']['php_value'] = 'return api_field_single_value(\'field_species_appendix_2_date\', $view->used_node);';
+  $handler->display->display_options['fields']['php_11']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_11']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_12']['id'] = 'php_12';
+  $handler->display->display_options['fields']['php_12']['table'] = 'views';
+  $handler->display->display_options['fields']['php_12']['field'] = 'php';
+  $handler->display->display_options['fields']['php_12']['label'] = 'concerted_action';
+  $handler->display->display_options['fields']['php_12']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_12']['php_value'] = 'return api_field_single_value(\'field_species_concerted_action\', $view->used_node);';
+  $handler->display->display_options['fields']['php_12']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_12']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_13']['id'] = 'php_13';
+  $handler->display->display_options['fields']['php_13']['table'] = 'views';
+  $handler->display->display_options['fields']['php_13']['field'] = 'php';
+  $handler->display->display_options['fields']['php_13']['label'] = 'cooperative_action';
+  $handler->display->display_options['fields']['php_13']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_13']['php_value'] = 'return api_field_single_value(\'field_species_cooperative_action\', $view->used_node);';
+  $handler->display->display_options['fields']['php_13']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_13']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_14']['id'] = 'php_14';
+  $handler->display->display_options['fields']['php_14']['table'] = 'views';
+  $handler->display->display_options['fields']['php_14']['field'] = 'php';
+  $handler->display->display_options['fields']['php_14']['label'] = 'population_global_size';
+  $handler->display->display_options['fields']['php_14']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_14']['php_value'] = 'return api_field_single_value(\'field_species_pop_global\', $view->used_node);';
+  $handler->display->display_options['fields']['php_14']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_14']['php_click_sortable'] = '';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_16']['id'] = 'php_16';
+  $handler->display->display_options['fields']['php_16']['table'] = 'views';
+  $handler->display->display_options['fields']['php_16']['field'] = 'php';
+  $handler->display->display_options['fields']['php_16']['label'] = 'population_global_date';
+  $handler->display->display_options['fields']['php_16']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_16']['php_value'] = 'return api_field_single_value(\'field_species_pop_global_date\', $view->used_node);';
+  $handler->display->display_options['fields']['php_16']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_16']['php_click_sortable'] = '';
   $handler->display->display_options['path'] = 'species_node';
   $translatables['api_species'] = array(
     t('Master'),
@@ -291,15 +389,22 @@ return "";';
     t('Node'),
     t('node'),
     t('<span>-</span>'),
+    t('scientific_name'),
     t('name'),
     t('taxonomy'),
     t('assessment_information'),
     t('population'),
-    t('population_size'),
+    t('population_size_trend'),
     t('geographic_range'),
     t('threats'),
     t('critical_sites'),
     t('additional_notes'),
+    t('appendix_1_date'),
+    t('appendix_2_date'),
+    t('concerted_action'),
+    t('cooperative_action'),
+    t('population_global_size'),
+    t('population_global_date'),
   );
   $export['api_species'] = $view;
 
