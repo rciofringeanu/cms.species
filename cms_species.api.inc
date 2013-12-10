@@ -110,29 +110,6 @@ function api_name_group($node) {
     return $names;
 }
 
-/**
- * Function used by api_assessment_info_group to get field_species_instruments field collection array of field values
- *
- * @author Dragos Dumitrescu
- */
-
-function api_instruments_field_collection($node) {
-    foreach ($node->field_species_instruments[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $instruments = entity_load('field_collection_item', array($ids));
-    foreach ($instruments as $instrument) {
-        if (isset($instrument->field_species_instrument[$node->language][0])) {
-            $results []= array(
-                'instrument'        => node_load($instrument->field_species_instrument[$node->language][0]['target_id'])->title,
-                'instrument_date'   => $instrument->field_species_instrument_date[$node->language][0]['value'],
-            );
-        }
-    }
-    return $results;
-}
-
 
 
 /**
@@ -166,15 +143,20 @@ function api_taxonomy_group($node) {
  */
 
 function api_assessment_info_group($node) {
-    $group = array();
 
-    $group['cms_instruments'] = api_instruments_field_collection($node);
-
-    foreach (API_SPECIES::$assesment as $field_name => $new_key) {
-        $group[$new_key] = $node->{$field_name}[$node->language][0]['value'];
+    foreach ($node->field_species_instruments[$node->language] as $field) {
+        $ids []= $field['value'];
     }
-
-    return $group;
+    $results = array();
+    $instruments = entity_load('field_collection_item', array($ids));
+    foreach ($instruments as $instrument) {
+        if (isset($instrument->field_species_instrument[$node->language][0])) {
+            $instr['instrument'] = API_SPECIES::get_instrument($instrument->field_species_instrument[$node->language][0]['target_id']);
+            $instr['date_of_entry'] = $instrument->field_species_instrument_date[$node->language][0]['value'];
+            $results []= $instr;
+        }
+    }
+    return $results;
 }
 
 
@@ -193,8 +175,8 @@ function api_species_population($node) {
     foreach ($populations as $population) {
         if (isset($population->field_species_pop_li[$node->language][0])) {
             $results []= array(
-                'cms_instrument'    => node_load($population->field_species_pop_li[$node->language][0]['target_id'])->title,
-                'population_name'   => taxonomy_term_load($population->field_species_pop_v[$node->language][0]['tid'])->name,
+                'instrument'        => API_SPECIES::get_instrument($population->field_species_pop_li[$node->language][0]['target_id']),
+                'name'   => taxonomy_term_load($population->field_species_pop_v[$node->language][0]['tid'])->name,
             );
         }
     }
@@ -235,7 +217,7 @@ function api_species_pop_size($node) {
 function api_geographic_range($node) {
     $result = array();
     $result['range_states'] = api_species_range_states($node);
-    $result['range_states_notes'] = current(API_SPECIES::get_api_field_values('field_species_range_states_notes', $node));
+    $result['notes'] = current(API_SPECIES::get_api_field_values('field_species_range_states_notes', $node));
     return $result;
 }
 
@@ -256,7 +238,7 @@ function api_species_range_states($node) {
         $result = API_SPECIES::set_api_fields_coll_field(API_SPECIES::$range_states_fields, $range, $node->language);
         if (isset($range->field_species_range_state[$node->language][0])) {
             $result[API_SPECIES::$range_states_fields['field_species_range_state']] =
-                node_load($range->field_species_range_state[$node->language][0]['target_id'])->title;
+                API_SPECIES::get_country($range->field_species_range_state[$node->language][0]['target_id']);
         }
         $results []= $result;
     }
@@ -352,17 +334,18 @@ class API_SPECIES {
      */
     static $pop_size_fields = array(
         "field_species_pop_size_r"      => "population_name",
-        "field_species_pop_size_i"      => "population_interval",
-        "field_species_pop_size_q"      => "population_quality",
-        "field_species_pop_size_e"      => "population_estimated_size",
-        "field_species_pop_size_ref"    => "population_size_reference",
-        "field_species_pop_size_n"      => "population_size_notes",
+
+        "field_species_pop_size_i"      => "size_interval",
+        "field_species_pop_size_q"      => "size_quality",
+        "field_species_pop_size_e"      => "estimated_size",
+        "field_species_pop_size_ref"    => "size_reference",
+        "field_species_pop_size_n"      => "size_notes",
 
         "field_species_pop_trend_i"     => "trend_interval",
         "field_species_rend_size_q"     => "trend_quality",
         "field_species_pop_trend_t"     => "trend",
         "field_species_pop_trend_ref"   => "trend_reference",
-        "field_species_pop_trend_n"     => "trend_size_notes",
+        "field_species_pop_trend_n"     => "trend_notes",
     )   ;
 
     static $range_states_fields = array (
@@ -403,7 +386,6 @@ class API_SPECIES {
            'field_species_experts'             => 'experts',
         ),
         'text' => array(
-            'field_species_scientific_order'    => 'scientific_order',
             'field_species_standard_reference'  => 'standard_reference',
         ),
         'term' => array(
@@ -416,15 +398,14 @@ class API_SPECIES {
         )
     );
 
-    static $assesment = array(
-        "field_species_appendix_1_date"       => "appendix_1",
-        "field_species_appendix_2_date"       => "appendix_2",
+    /*static $assesment = array(
+        "field_species_appendix_1_date"       => "appendix_1_date",
+        "field_species_appendix_2_date"       => "appendix_2_date",
         "field_species_concerted_action"       => "concerted_action",
         "field_species_cooperative_action"       => "cooperative_action",
         "field_species_pop_global"       => "population_global_size",
         "field_species_pop_global_date"       => "population_global_date",
-        "field_species_iucn_web_srv"       => "iucn_ws",
-    );
+    );*/
 
 
     /**
@@ -493,4 +474,27 @@ class API_SPECIES {
         }
         return $values;
     }
+
+
+    static function get_instrument($nid) {
+            $node = node_load($nid);
+            if ($node == false) {
+                return FALSE;
+            }
+            $instrument['instrument'] = $node->title;
+            $instrument['uuid'] = $node->uuid;
+            return $instrument;
+        }
+    static function get_country($nid) {
+        $node = node_load($nid);
+        if ($node == false) {
+            return FALSE;
+        }
+        $country['name'] = $node->title;
+        $country['uuid'] = $node->uuid;
+        $country['iso3l'] = $node->field_country_iso3[$node->language][0]['value'];
+        $country['iso2l'] = $node->field_country_iso2[$node->language][0]['value'];
+        return $country;
+    }
+
 }
