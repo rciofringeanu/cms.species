@@ -30,6 +30,7 @@ define('VOC_SPECIES_AEWA_COUNTRY_STATUS', 'aewa_country_status');
 define('VOC_SPECIES_AEWA_STATUS_A', 'aewa_status_column_a');
 define('VOC_SPECIES_AEWA_STATUS_B', 'aewa_status_column_b');
 define('VOC_SPECIES_AEWA_STATUS_C', 'aewa_status_column_c');
+define('FILTER_SPECIES_INSTRUMENT_FIELD', 'field_species_instrument_target_id');
 
 module_load_include('module', 'cms');
 
@@ -292,20 +293,24 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
 
                 $instruments[''] = t('Any');
                 $instruments = $instruments + CMSLegalInstrument::get_mapped_instruments($title_as_key = FALSE);
-                $instruments_ids = array_keys($instruments);
 
-                if (isset($_GET['field_species_instrument_target_id']) && (in_array($_GET['field_species_instrument_target_id'], $instruments_ids))) {
-                    $instrument_selected = $_GET['field_species_instrument_target_id'];
-                } else {
-                    $instrument_selected = '';
+                $current_profile = CMSUtils::get_current_profile();
+                foreach ($instruments as $id => $name) {
+                    if (strtolower($name) == $current_profile) {
+                        $current_instrument_id = $id;
+                    }
                 }
+                $instrument_selected = (isset($_GET[FILTER_SPECIES_INSTRUMENT_FIELD])
+                    && (in_array($_GET[FILTER_SPECIES_INSTRUMENT_FIELD], array_keys($instruments))))
+                    ? $_GET[FILTER_SPECIES_INSTRUMENT_FIELD] : (string)$current_instrument_id;
 
-                $form['field_species_instrument_target_id'] = array(
+                $form[FILTER_SPECIES_INSTRUMENT_FIELD] = array(
                     '#type' => 'select',
                     '#prefix' => '<div id="dropdown-family-replace">',
                     '#suffix' => '</div>',
                     '#options' => $instruments,
                     '#default_value' => $instrument_selected,
+                    '#value' => $instrument_selected,
                 );
 
                 $breadcrumb = array();
@@ -780,7 +785,6 @@ function api_species_json($scientific_name) {
     echo json_encode($node);
     drupal_exit();
 }
-
 
 /**
  * Implements hook_field_extra_fields()
