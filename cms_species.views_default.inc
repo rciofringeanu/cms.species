@@ -637,14 +637,13 @@ return "";';
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
-  $handler->display->display_options['fields']['title_1']['table'] = 'node';
-  $handler->display->display_options['fields']['title_1']['field'] = 'title';
-  $handler->display->display_options['fields']['title_1']['label'] = 'Appendix (App. I / App. II)';
-  $handler->display->display_options['fields']['title_1']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['title_1']['alter']['text'] = '[field_species_appendix_1_date][field_species_appendix_2_date]';
-  $handler->display->display_options['fields']['title_1']['link_to_node'] = FALSE;
+  /* Field: Content: Class */
+  $handler->display->display_options['fields']['field_species_class_1']['id'] = 'field_species_class_1';
+  $handler->display->display_options['fields']['field_species_class_1']['table'] = 'field_data_field_species_class';
+  $handler->display->display_options['fields']['field_species_class_1']['field'] = 'field_species_class';
+  $handler->display->display_options['fields']['field_species_class_1']['label'] = 'Appendix (App. I / App. II)';
+  $handler->display->display_options['fields']['field_species_class_1']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_species_class_1']['alter']['text'] = '[field_species_appendix_1_date][field_species_appendix_2_date]';
   /* Sort criterion: Taxonomy term: Name */
   $handler->display->display_options['sorts']['name']['id'] = 'name';
   $handler->display->display_options['sorts']['name']['table'] = 'taxonomy_term_data';
