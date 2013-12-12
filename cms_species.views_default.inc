@@ -627,6 +627,8 @@ return "";';
   $handler->display->display_options['fields']['field_species_appendix_2_date']['field'] = 'field_species_appendix_2_date';
   $handler->display->display_options['fields']['field_species_appendix_2_date']['label'] = '';
   $handler->display->display_options['fields']['field_species_appendix_2_date']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_species_appendix_2_date']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_species_appendix_2_date']['alter']['text'] = ' / [field_species_appendix_2_date]';
   $handler->display->display_options['fields']['field_species_appendix_2_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_species_appendix_2_date']['settings'] = array(
     'format_type' => 'year_date_type',
@@ -641,7 +643,7 @@ return "";';
   $handler->display->display_options['fields']['title_1']['field'] = 'title';
   $handler->display->display_options['fields']['title_1']['label'] = 'Appendix (App. I / App. II)';
   $handler->display->display_options['fields']['title_1']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['title_1']['alter']['text'] = '[field_species_appendix_1_date] / [field_species_appendix_2_date]';
+  $handler->display->display_options['fields']['title_1']['alter']['text'] = '[field_species_appendix_1_date][field_species_appendix_2_date]';
   $handler->display->display_options['fields']['title_1']['link_to_node'] = FALSE;
   /* Sort criterion: Taxonomy term: Name */
   $handler->display->display_options['sorts']['name']['id'] = 'name';
@@ -1652,8 +1654,9 @@ return "";';
     t('Order'),
     t('Family'),
     t('CMS Instruments'),
+    t(' / [field_species_appendix_2_date]'),
     t('Appendix (App. I / App. II)'),
-    t('[field_species_appendix_1_date] / [field_species_appendix_2_date]'),
+    t('[field_species_appendix_1_date][field_species_appendix_2_date]'),
     t('CMS Instrument'),
     t('Species listing'),
     t('Data export'),
