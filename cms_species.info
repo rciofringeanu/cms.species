@@ -4,15 +4,18 @@ core = 7.x
 package = CMS
 version = 7.x-2.4
 project = cms_species
+
 dependencies[] = field_collection
-dependencies[] = rest_server
-dependencies[] = services_basic_auth
-dependencies[] = services_views
-dependencies[] = uuid_services
 dependencies[] = views_autocomplete_filters
 dependencies[] = views_data_export
 dependencies[] = views_php
+dependencies[] = rest_server
+dependencies[] = services_basic_auth
+dependencies[] = services_views
 dependencies[] = xmlrpc_server
+dependencies[] = views_php
+dependencies[] = services
+
 features[ctools][] = services:services:3
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
