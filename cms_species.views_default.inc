@@ -26,6 +26,7 @@ function cms_species_views_default_views() {
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'role';
   $handler->display->display_options['access']['role'] = array(
+    11 => '11',
     3 => '3',
     10 => '10',
   );
@@ -43,7 +44,7 @@ function cms_species_views_default_views() {
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['label'] = 'scientific_name';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   /* Field: Content: Nid */
@@ -103,17 +104,17 @@ function cms_species_views_default_views() {
     9 => 0,
     10 => 0,
   );
-  /* Filter criterion: Content: Node UUID */
-  $handler->display->display_options['filters']['uuid']['id'] = 'uuid';
-  $handler->display->display_options['filters']['uuid']['table'] = 'node';
-  $handler->display->display_options['filters']['uuid']['field'] = 'uuid';
-  $handler->display->display_options['filters']['uuid']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['uuid']['expose']['operator_id'] = 'uuid_op';
-  $handler->display->display_options['filters']['uuid']['expose']['label'] = 'uuid';
-  $handler->display->display_options['filters']['uuid']['expose']['operator'] = 'uuid_op';
-  $handler->display->display_options['filters']['uuid']['expose']['identifier'] = 'uuid';
-  $handler->display->display_options['filters']['uuid']['expose']['required'] = TRUE;
-  $handler->display->display_options['filters']['uuid']['expose']['remember_roles'] = array(
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Scientific Name';
+  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'scientific_name';
+  $handler->display->display_options['filters']['title']['expose']['required'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
@@ -125,11 +126,10 @@ function cms_species_views_default_views() {
     9 => 0,
     10 => 0,
   );
-  $handler->display->display_options['filters']['uuid']['expose']['autocomplete_items'] = '10';
-  $handler->display->display_options['filters']['uuid']['expose']['autocomplete_field'] = 'uuid';
-  $handler->display->display_options['filters']['uuid']['expose']['autocomplete_raw_suggestion'] = 1;
-  $handler->display->display_options['filters']['uuid']['expose']['autocomplete_raw_dropdown'] = 1;
-  $handler->display->display_options['filters']['uuid']['expose']['autocomplete_dependent'] = 0;
+  $handler->display->display_options['filters']['title']['expose']['autocomplete_items'] = '10';
+  $handler->display->display_options['filters']['title']['expose']['autocomplete_raw_suggestion'] = 1;
+  $handler->display->display_options['filters']['title']['expose']['autocomplete_raw_dropdown'] = 1;
+  $handler->display->display_options['filters']['title']['expose']['autocomplete_dependent'] = 0;
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
@@ -189,6 +189,11 @@ function cms_species_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'scientific_name';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -219,15 +224,6 @@ function cms_species_views_default_views() {
 return "";';
   $handler->display->display_options['fields']['php_2']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_2']['php_click_sortable'] = '';
-  /* Field: Global: PHP */
-  $handler->display->display_options['fields']['php_5']['id'] = 'php_5';
-  $handler->display->display_options['fields']['php_5']['table'] = 'views';
-  $handler->display->display_options['fields']['php_5']['field'] = 'php';
-  $handler->display->display_options['fields']['php_5']['label'] = 'scientific_name';
-  $handler->display->display_options['fields']['php_5']['use_php_setup'] = 0;
-  $handler->display->display_options['fields']['php_5']['php_value'] = 'return $view->used_node->title;';
-  $handler->display->display_options['fields']['php_5']['use_php_click_sortable'] = '0';
-  $handler->display->display_options['fields']['php_5']['php_click_sortable'] = '';
   /* Field: Global: PHP */
   $handler->display->display_options['fields']['php_7']['id'] = 'php_7';
   $handler->display->display_options['fields']['php_7']['table'] = 'views';
@@ -380,16 +376,17 @@ return "";';
     t('‹ previous'),
     t('next ›'),
     t('last »'),
+    t('scientific_name'),
     t('nid'),
     t('UUID'),
     t('updated'),
-    t('uuid'),
+    t('Scientific Name'),
     t('Page'),
     t('List'),
     t('Node'),
+    t('uuid'),
     t('node'),
     t('<span>-</span>'),
-    t('scientific_name'),
     t('name'),
     t('taxonomy'),
     t('assessment_information'),
