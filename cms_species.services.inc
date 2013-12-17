@@ -21,11 +21,11 @@ function cms_species_default_services_endpoint() {
   );
   $endpoint->server_settings = array(
     'formatters' => array(
-      'bencode' => TRUE,
       'json' => TRUE,
-      'php' => TRUE,
       'xml' => TRUE,
+      'bencode' => FALSE,
       'jsonp' => FALSE,
+      'php' => FALSE,
     ),
     'parsers' => array(
       'multipart/form-data' => TRUE,
@@ -62,7 +62,7 @@ function cms_species_default_services_endpoint() {
       ),
     ),
   );
-  $endpoint->debug = 1;
+  $endpoint->debug = 0;
   $export['ws'] = $endpoint;
 
   return $export;
