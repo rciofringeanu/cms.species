@@ -752,7 +752,7 @@ return "";';
   $handler->display->display_options['style_options']['provide_file'] = 1;
   $handler->display->display_options['style_options']['filename'] = 'species.xls';
   $handler->display->display_options['style_options']['parent_sort'] = 0;
-  $handler->display->display_options['path'] = 'species/export';
+  $handler->display->display_options['path'] = 'manage/species/export';
 
   /* Display: Publication's species */
   $handler = $view->new_display('page', 'Publication\'s species', 'publication_species');
