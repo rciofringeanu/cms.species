@@ -431,10 +431,8 @@ return "";';
   $handler->display->display_options['exposed_form']['options']['submit_button'] = 'Search';
   $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
   $handler->display->display_options['exposed_form']['options']['autosubmit_hide'] = FALSE;
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '50';
+  $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['style_plugin'] = 'datatables';
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
@@ -445,7 +443,7 @@ return "";';
     'field_species_instruments' => 'field_species_instruments',
     'field_species_appendix_1_date' => 'field_species_appendix_1_date',
     'field_species_appendix_2_date' => 'field_species_appendix_2_date',
-    'field_species_appendix_1_date_1' => 'field_species_appendix_1_date_1',
+    'field_species_class_1' => 'field_species_class_1',
   );
   $handler->display->display_options['style_options']['default'] = 'title';
   $handler->display->display_options['style_options']['info'] = array(
@@ -464,21 +462,21 @@ return "";';
       'empty_column' => 0,
     ),
     'field_species_class' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_species_order' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_species_family' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -503,7 +501,7 @@ return "";';
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_species_appendix_1_date_1' => array(
+    'field_species_class_1' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -511,11 +509,11 @@ return "";';
       'empty_column' => 0,
     ),
   );
-  $handler->display->display_options['style_options']['empty_table'] = TRUE;
   $handler->display->display_options['style_options']['elements'] = array(
     'search_box' => 1,
     'table_info' => 1,
     'save_state' => 0,
+    'enable_tabletools' => 1,
   );
   $handler->display->display_options['style_options']['layout'] = array(
     'autowidth' => 1,
@@ -525,17 +523,11 @@ return "";';
   $handler->display->display_options['style_options']['pages'] = array(
     'pagination_style' => 'full_numbers',
     'length_change' => 1,
-    'display_length' => '50',
-    'processing' => 1,
-    'server_side' => 1,
+    'display_length' => '10',
+    'processing' => 0,
+    'server_side' => 0,
     'items_per_page_options' => '10, 25, 50, All',
   );
-  /* No results behavior: Global: Text area */
-  $handler->display->display_options['empty']['area']['id'] = 'area';
-  $handler->display->display_options['empty']['area']['table'] = 'views';
-  $handler->display->display_options['empty']['area']['field'] = 'area';
-  $handler->display->display_options['empty']['area']['content'] = 'There are no species matching the selected criteria';
-  $handler->display->display_options['empty']['area']['format'] = 'full_html';
   /* Relationship: Content: CMS Instruments (field_species_instruments) */
   $handler->display->display_options['relationships']['field_species_instruments_value']['id'] = 'field_species_instruments_value';
   $handler->display->display_options['relationships']['field_species_instruments_value']['table'] = 'field_data_field_species_instruments';
@@ -641,34 +633,6 @@ return "";';
   $handler->display->display_options['fields']['field_species_class_1']['label'] = 'Appendix (App. I / App. II)';
   $handler->display->display_options['fields']['field_species_class_1']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_species_class_1']['alter']['text'] = '[field_species_appendix_1_date][field_species_appendix_2_date]';
-  /* Sort criterion: Taxonomy term: Name */
-  $handler->display->display_options['sorts']['name']['id'] = 'name';
-  $handler->display->display_options['sorts']['name']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['sorts']['name']['field'] = 'name';
-  $handler->display->display_options['sorts']['name']['relationship'] = 'field_species_class_tid';
-  $handler->display->display_options['sorts']['name']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['name']['expose']['label'] = 'Class';
-  /* Sort criterion: Taxonomy term: Name */
-  $handler->display->display_options['sorts']['name_1']['id'] = 'name_1';
-  $handler->display->display_options['sorts']['name_1']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['sorts']['name_1']['field'] = 'name';
-  $handler->display->display_options['sorts']['name_1']['relationship'] = 'field_species_order_tid';
-  $handler->display->display_options['sorts']['name_1']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['name_1']['expose']['label'] = 'Order';
-  /* Sort criterion: Taxonomy term: Name */
-  $handler->display->display_options['sorts']['name_2']['id'] = 'name_2';
-  $handler->display->display_options['sorts']['name_2']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['sorts']['name_2']['field'] = 'name';
-  $handler->display->display_options['sorts']['name_2']['relationship'] = 'field_species_family_tid';
-  $handler->display->display_options['sorts']['name_2']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['name_2']['expose']['label'] = 'Family';
-  /* Sort criterion: Content: Title */
-  $handler->display->display_options['sorts']['title']['id'] = 'title';
-  $handler->display->display_options['sorts']['title']['table'] = 'node';
-  $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['relationship'] = 'field_species_instruments_node';
-  $handler->display->display_options['sorts']['title']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['title']['expose']['label'] = 'CMS Instrument';
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
@@ -738,21 +702,46 @@ return "";';
 
   /* Display: Species listing */
   $handler = $view->new_display('page', 'Species listing', 'species_listing');
+  $handler->display->display_options['defaults']['cache'] = FALSE;
+  $handler->display->display_options['cache']['type'] = 'views_content_cache';
+  $handler->display->display_options['cache']['results_min_lifespan'] = '-1';
+  $handler->display->display_options['cache']['results_max_lifespan'] = '21600';
+  $handler->display->display_options['cache']['output_min_lifespan'] = '-1';
+  $handler->display->display_options['cache']['output_max_lifespan'] = '518400';
+  $handler->display->display_options['cache']['keys'] = array(
+    'comment' => array(
+      'changed' => 0,
+    ),
+    'node' => array(
+      'species' => 'species',
+      'legal_instrument' => 0,
+      'country' => 0,
+      'document' => 0,
+      'event_calendar' => 0,
+      'meeting' => 0,
+      'project' => 0,
+      'publication' => 0,
+    ),
+    'node_only' => array(
+      'node_changed' => 'node_changed',
+    ),
+  );
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = '<br />
+<div class="alert">
+  <strong>There are no entries matching the selected criteria!</strong>
+</div>';
+  $handler->display->display_options['empty']['area']['format'] = 'full_html';
   $handler->display->display_options['path'] = 'manage/species/listing';
   $handler->display->display_options['menu']['title'] = 'Scientific name';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'main-menu';
   $handler->display->display_options['menu']['context'] = 0;
-
-  /* Display: Data export */
-  $handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
-  $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'views_data_export_xls';
-  $handler->display->display_options['style_options']['provide_file'] = 1;
-  $handler->display->display_options['style_options']['filename'] = 'species.xls';
-  $handler->display->display_options['style_options']['parent_sort'] = 0;
-  $handler->display->display_options['path'] = 'manage/species/export';
 
   /* Display: Publication's species */
   $handler = $view->new_display('page', 'Publication\'s species', 'publication_species');
@@ -1631,14 +1620,6 @@ return "";';
     t('Sort by'),
     t('Asc'),
     t('Desc'),
-    t('Items per page'),
-    t('- All -'),
-    t('Offset'),
-    t('« first'),
-    t('‹ previous'),
-    t('next ›'),
-    t('last »'),
-    t('There are no species matching the selected criteria'),
     t('field collection item from field_species_instruments'),
     t('term from field_species_class'),
     t('term from field_species_order'),
@@ -1655,12 +1636,22 @@ return "";';
     t('[field_species_appendix_1_date][field_species_appendix_2_date]'),
     t('CMS Instrument'),
     t('Species listing'),
-    t('Data export'),
+    t('<br />
+<div class="alert">
+  <strong>There are no entries matching the selected criteria!</strong>
+</div>'),
     t('Publication\'s species'),
     t('Publication species'),
     t('Content entity referenced from field_species_publication'),
     t('All'),
     t('Instrument species'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
     t('Content entity referenced from field_species_instrument'),
     t('Country species'),
     t('field collection item from field_species_range_states'),
