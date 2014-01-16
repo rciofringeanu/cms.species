@@ -474,6 +474,14 @@ return "";';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'species' => 'species',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -485,6 +493,7 @@ return "";';
   $handler->display->display_options['filters']['field_species_class_tid']['id'] = 'field_species_class_tid';
   $handler->display->display_options['filters']['field_species_class_tid']['table'] = 'field_data_field_species_class';
   $handler->display->display_options['filters']['field_species_class_tid']['field'] = 'field_species_class_tid';
+  $handler->display->display_options['filters']['field_species_class_tid']['group'] = 1;
   $handler->display->display_options['filters']['field_species_class_tid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_species_class_tid']['expose']['operator_id'] = 'field_species_class_tid_op';
   $handler->display->display_options['filters']['field_species_class_tid']['expose']['label'] = 'Class';
