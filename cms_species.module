@@ -316,6 +316,29 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
                 $breadcrumb = array();
                 $breadcrumb[] = l(t('Home'), '<front>');
                 drupal_set_breadcrumb($breadcrumb);
+
+            } else if ($form['#id'] == 'views-exposed-form-front-end-species-list') {
+                $instruments[''] = t('Any');
+                $instruments = $instruments + CMSLegalInstrument::get_mapped_instruments($title_as_key = FALSE);
+
+                $current_profile = CMSUtils::get_current_profile();
+                foreach ($instruments as $id => $name) {
+                    if (strtolower($name) == $current_profile) {
+                        $current_instrument_id = $id;
+                    }
+                }
+                $instrument_selected = (isset($_GET[FILTER_SPECIES_INSTRUMENT_FIELD])
+                    && (in_array($_GET[FILTER_SPECIES_INSTRUMENT_FIELD], array_keys($instruments))))
+                    ? $_GET[FILTER_SPECIES_INSTRUMENT_FIELD] : (string)$current_instrument_id;
+
+                $form[FILTER_SPECIES_INSTRUMENT_FIELD] = array(
+                    '#type' => 'select',
+                    '#prefix' => '<div id="dropdown-family-replace">',
+                    '#suffix' => '</div>',
+                    '#options' => $instruments,
+                    '#default_value' => $instrument_selected,
+                    '#value' => $instrument_selected,
+                );
             }
             break;
         case 'node_delete_confirm':
