@@ -508,10 +508,6 @@ function cms_species_node_view($node, $view_mode, $langcode) {
         }
     }
 
-    if ($node->type == 'species') {
-
-    }
-
     switch($node->type) {
         case 'country':
             $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
@@ -871,10 +867,6 @@ function cms_species_node_load($nodes, $types) {
             default: break;
         }
     }
-}
-
-function cms_species_preprocess_page(&$variables) {
-    $variables['system_main']['countries'] = 'ceva';
 }
 
 
