@@ -508,6 +508,10 @@ function cms_species_node_view($node, $view_mode, $langcode) {
         }
     }
 
+    if ($node->type == 'species') {
+
+    }
+
     switch($node->type) {
         case 'country':
             $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
@@ -867,6 +871,10 @@ function cms_species_node_load($nodes, $types) {
             default: break;
         }
     }
+}
+
+function cms_species_preprocess_page(&$variables) {
+    $variables['system_main']['countries'] = 'ceva';
 }
 
 
@@ -1903,5 +1911,57 @@ class CMSSpecies extends CMSBase {
             }
         }
         return $ret;
+    }
+
+    /**
+     * Function used in template to get data for front-end species profile page
+     * @param $node
+     *
+     * @return array - $data returned should be used in template file by drupal_ammap_render_map() to render the map
+     * @author Dragos Dumitrescu
+     */
+    public static function get_range_states_for_ammap($node) {
+        $countries_fc_ids = array();
+        foreach ($node->field_species_range_states[$node->language] as $country) {
+            $countries_fc_ids []= $country['value'];
+        }
+        $result = entity_load('field_collection_item', $countries_fc_ids);
+        foreach ($result as  $field_col) {
+            $country_ids []= $field_col->field_species_range_state[$node->language][0]['target_id'];
+            $countries_field_col[$field_col->field_species_range_state[$node->language][0]['target_id']]= $field_col;
+        }
+
+        $query = new EntityFieldQuery();
+        $query->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', 'country')
+            ->propertyCondition('status', 1)
+            ->propertyCondition('nid', $country_ids );
+        $result = $query->execute();
+        $countries = $result['node'];
+
+        // Get all fields attached to a given node type
+        $fields = field_info_instances('node', 'country');
+
+        // Put all field names you want to load
+        $field_names = array('field_story_image', 'field_country_official_name');
+
+        foreach ($field_names AS $field_name) {
+            // Get id of body field
+            $field_id = $fields[$field_name]['field_id'];
+
+            // Attach a field of selected id only to get value for it
+            field_attach_load('node', $countries, FIELD_LOAD_CURRENT, array('field_id' => $field_id));
+        }
+        foreach ($countries as $nid => $country) {
+            $data []= array(
+                //'title' => $country->field_country_official_name[$node->language][0]['value'],
+                'iso2'  => $country->field_country_iso2[$node->language][0]['value'],
+                'customData'  => '',
+                'legend' => '',
+                'url' => drupal_lookup_path('alias',"node/" . $country->nid),
+                'color' => ''
+            );
+        }
+        return $data;
     }
 }
