@@ -505,17 +505,22 @@ function cms_species_node_view($node, $view_mode, $langcode) {
             $breadcrumb[] = l(t('Home'), '<front>');
             $breadcrumb[] = l(t('Species'), ADMINISTRATION_PATH . 'species/listing');
             drupal_set_breadcrumb($breadcrumb);
+
+
+            $node->ammap_data = CMSSpecies::get_range_states_for_ammap($node);
         }
     }
 
-    switch($node->type) {
+    // @TODO to be removed if no problems spotted - commented on 07.02.14
+    /*switch($node->type) {
         case 'country':
             $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
             break;
         case 'legal_instrument':
             $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_instrument', 'field_species_instruments');
             break;
-    }
+    }*/
+
 }
 
 /**
@@ -638,8 +643,9 @@ function cms_species_family_display($nid) {
 
 /**
  * Implements hook_entity_view($entity, $type, $view_mode, $langcode)
+ * @TODO to be removed if no problems spotted - commented on 07.02.14
  */
-function cms_species_entity_view($entity, $type, $view_mode, $langcode){
+/*function cms_species_entity_view($entity, $type, $view_mode, $langcode){
     if($type != 'node' || $view_mode !== 'full') {
         return;
     }
@@ -647,7 +653,7 @@ function cms_species_entity_view($entity, $type, $view_mode, $langcode){
     $node = node_load($entity->nid);
 
     // Inject the projects into the country profile page
-    switch($entity->type) {
+     switch($entity->type) {
         case CMSSpecies::$bundle_country_module:
             $node->content[CMSSpecies::$field_species_country] = _species_get_species_render($node, $view_mode, 'table__species_template_country', CMSSpecies::$field_species_country, CMSSpecies::$bundle_country_module, 'country');
             break;
@@ -655,7 +661,7 @@ function cms_species_entity_view($entity, $type, $view_mode, $langcode){
             $node->content[CMSSpecies::$field_species_instrument] = _species_get_species_render($node, $view_mode, 'table__species_template_instrument', CMSSpecies::$field_species_instrument, CMSSpecies::$bundle_instrument_module, 'CMS Instrument');
             break;
     }
-}
+}*/
 
 
 function _species_get_species_render($node, $view_mode, $theme, $field, $bundle, $type) {
