@@ -506,6 +506,47 @@ function cms_species_node_view($node, $view_mode, $langcode) {
             $breadcrumb[] = l(t('Species'), ADMINISTRATION_PATH . 'species/listing');
             drupal_set_breadcrumb($breadcrumb);
 
+            //Set the counters for related content
+            $view_meetings = views_get_view('meetings');
+            $view_meetings->set_display('species_meetings');
+            $view_meetings->set_arguments(array($node->nid));
+            $view_meetings->execute();
+            $node->meetings_count = $view_meetings->total_rows;
+
+            //Set the counters for related content
+            $view_publications = views_get_view('publications_admin');
+            $view_publications->set_display('species_publications');
+            $view_publications->set_arguments(array($node->nid));
+            $view_publications->execute();
+            $node->publications_count = $view_publications->total_rows;
+
+            //Set the counters for related content
+            $view_projects = views_get_view('project_admin');
+            $view_projects->set_display('species_projects');
+            $view_projects->set_arguments(array($node->nid));
+            $view_projects->execute();
+            $node->projects_count = $view_projects->total_rows;
+
+            //Set the counters for related content
+            $view_national_plans = views_get_view('documents');
+            $view_national_plans->set_display('species_plans');
+            $view_national_plans->set_arguments(array($node->nid));
+            $view_national_plans->execute();
+            $node->national_plans_count = $view_national_plans->total_rows;
+
+            //Set the counters for related content
+            $view_national_reports = views_get_view('documents');
+            $view_national_reports->set_display('species_national_reports');
+            $view_national_reports->set_arguments(array($node->nid));
+            $view_national_reports->execute();
+            $node->national_plans_count = $view_national_reports->total_rows;
+
+            //Set the counters for related content
+            $view_other_documents = views_get_view('documents');
+            $view_other_documents->set_display('species_plans');
+            $view_other_documents->set_arguments(array($node->nid));
+            $view_other_documents->execute();
+            $node->other_documents_count = $view_other_documents->total_rows;
 
             $node->ammap_data = CMSSpecies::get_range_states_for_ammap($node);
         }
