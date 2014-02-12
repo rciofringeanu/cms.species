@@ -203,3 +203,4 @@ features_exclude[taxonomy][species_species] = species_species
 features_exclude[taxonomy][species_subspecies] = species_subspecies
 features_exclude[taxonomy][threats] = threats
 files[] = cms_species.test
+project status url = http://fserver.eaudeweb.ro/fserver
