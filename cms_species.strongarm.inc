@@ -92,6 +92,15 @@ function cms_species_strongarm() {
         'title' => array(
           'weight' => '0',
         ),
+        'domain' => array(
+          'weight' => '2',
+        ),
+        'domain_path' => array(
+          'weight' => '34',
+        ),
+        'path' => array(
+          'weight' => '33',
+        ),
       ),
       'display' => array(),
     ),
