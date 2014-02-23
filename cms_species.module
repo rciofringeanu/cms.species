@@ -614,25 +614,6 @@ function cms_species_node_view($node, $view_mode, $langcode) {
 }
 
 /**
- * Implements hook_node_access();
- */
-function cms_species_node_access($node, $op, $account) {
-    if(!empty($node->type) && ($node->type == 'species')) {
-        if($op == 'view') {
-            if(in_array('authenticated user', $account->roles)) {
-                return NODE_ACCESS_ALLOW;
-            }
-        } else {
-            if(in_array(ROLE_MANAGE_SPECIES, $account->roles)) {
-                return NODE_ACCESS_ALLOW;
-            }
-        }
-        return NODE_ACCESS_DENY;
-    }
-    return NODE_ACCESS_IGNORE;
-}
-
-/**
  * Get species orders by class
  *
  * If a class is specified return orders for class else return all orders.
