@@ -117,7 +117,7 @@ function cms_species_menu() {
  */
 function cms_species_menu_local_tasks_alter(&$data, $router_item, $root_path) {
     switch($root_path){
-        case ADMINISTRATION_PATH . CMSSpecies::$bundle . '/listing' :
+        case CMSSpecies::$bundle . '/listing' :
             $item = menu_get_item('node/add/' . CMSSpecies::$bundle);
             $item['title'] = t('Create ' . CMSSpecies::$bundle);
             if ($item['access']) {
@@ -239,11 +239,11 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
 
             $breadcrumb = array();
             $breadcrumb[] = l(t('Home'), '<front>');
-            $breadcrumb[] = l(t('Species'), ADMINISTRATION_PATH . 'species/listing');
+            $breadcrumb[] = l(t('Species'), 'species/listing');
 
             # Update breadcrumb on the edit form
             if (isset($form['nid']) && (is_numeric($form['nid']['#value']))) {
-                $breadcrumb[] = l($form['#node']->title, ADMINISTRATION_PATH . 'node/' . $node->nid);
+                $breadcrumb[] = l($form['#node']->title, 'node/' . $node->nid);
             }
 
             drupal_set_breadcrumb($breadcrumb);
@@ -505,7 +505,7 @@ function cms_species_node_view($node, $view_mode, $langcode) {
         if ($view_mode == 'full' && node_is_page($node) && is_theme_admin()) {
             $breadcrumb = array();
             $breadcrumb[] = l(t('Home'), '<front>');
-            $breadcrumb[] = l(t('Species'), ADMINISTRATION_PATH . 'species/listing');
+            $breadcrumb[] = l(t('Species'), 'species/listing');
             drupal_set_breadcrumb($breadcrumb);
 
             //Set the counters for related content
@@ -700,8 +700,8 @@ function cms_species_family_display($nid) {
 
         $breadcrumb = array();
         $breadcrumb[] = l(t('Home'), '<front>');
-        $breadcrumb[] = l(t('Species'), ADMINISTRATION_PATH . 'species/listing');
-        $breadcrumb[] = l($node->title, ADMINISTRATION_PATH . 'node/' . $node->nid);
+        $breadcrumb[] = l(t('Species'), 'species/listing');
+        $breadcrumb[] = l($node->title, 'node/' . $node->nid);
         drupal_set_breadcrumb($breadcrumb);
         return theme('species_family_display_template', array('content' => $view,
                                                               'node' => $node,
