@@ -284,26 +284,30 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
                     '#default_value' => $family_selected,
                 );
 
-                $instruments[''] = t('Any');
-                $instruments = $instruments + CMSLegalInstrument::get_mapped_instruments($title_as_key = FALSE);
-
                 $current_profile = CMSUtils::get_current_profile();
-                foreach ($instruments as $id => $name) {
-                    if (strtolower($name) == $current_profile) {
-                        $current_instrument_id = $id;
+                $current_instrument_id = '';
+                $instruments = CMSLegalInstrument::get_mapped_instruments($title_as_key = FALSE);
+                // For other instruments than CMS, set the instrument as the default filter
+                if($current_profile != 'cms') {
+                    foreach ($instruments as $id => $name) {
+                        if (strtolower($name) == $current_profile) {
+                            $current_instrument_id = $id;
+                        }
                     }
                 }
-                $instrument_selected = (isset($_GET[FILTER_SPECIES_INSTRUMENT_FIELD])
-                    && (in_array($_GET[FILTER_SPECIES_INSTRUMENT_FIELD], array_keys($instruments))))
-                    ? $_GET[FILTER_SPECIES_INSTRUMENT_FIELD] : (string)$current_instrument_id;
+                if(isset($_GET[FILTER_SPECIES_INSTRUMENT_FIELD])) {
+                    $current_instrument_id = $_GET[FILTER_SPECIES_INSTRUMENT_FIELD];
+                }
+                asort($instruments);
+                $instruments = array('' => t('Any')) + $instruments;
 
                 $form[FILTER_SPECIES_INSTRUMENT_FIELD] = array(
                     '#type' => 'select',
                     '#prefix' => '<div id="dropdown-family-replace">',
                     '#suffix' => '</div>',
                     '#options' => $instruments,
-                    '#default_value' => $instrument_selected,
-                    '#value' => $instrument_selected,
+                    '#default_value' => $current_instrument_id,
+                    '#value' => $current_instrument_id,
                 );
 
                 $breadcrumb = array();
