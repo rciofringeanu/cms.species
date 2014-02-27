@@ -44,13 +44,6 @@ module_load_include('module', 'cms');
 function cms_species_menu() {
     $items = array();
 
-    $items['species/%/%/%'] = array(
-        'page callback' => 'cms_species_ajax',
-        'page arguments' => array(1, 2, 3, 4),
-        'access arguments' => array('edit any species content'),
-        'type' => MENU_CALLBACK,
-    );
-
     /**
      * Menu item for species API
      */
