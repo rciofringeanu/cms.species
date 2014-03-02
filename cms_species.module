@@ -30,7 +30,7 @@ define('VOC_SPECIES_AEWA_COUNTRY_STATUS', 'aewa_country_status');
 define('VOC_SPECIES_AEWA_STATUS_A', 'aewa_status_column_a');
 define('VOC_SPECIES_AEWA_STATUS_B', 'aewa_status_column_b');
 define('VOC_SPECIES_AEWA_STATUS_C', 'aewa_status_column_c');
-define('FILTER_SPECIES_INSTRUMENT_FIELD', 'field_species_instrument_target_id');
+define('FILTER_SPECIES_INSTRUMENT_FIELD', 'field_instrument_target_id');
 
 module_load_include('module', 'cms');
 
@@ -604,7 +604,7 @@ function cms_species_node_view($node, $view_mode, $langcode) {
             $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
             break;
         case 'legal_instrument':
-            $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_instrument', 'field_species_instruments');
+            $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_instrument', 'field_species_instruments');
             break;
     }*/
 
@@ -927,7 +927,7 @@ function cms_species_node_load($nodes, $types) {
                 }
                 break;
             case CMSSpecies::$bundle_instrument_module:
-                $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_instrument', 'field_species_instruments');
+                $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_instrument', 'field_species_instruments');
                 $node->species[$node->language] = array();
                 foreach($species as $row) {
                     $node->species[$node->language][] = array(
@@ -1074,7 +1074,7 @@ class CMSSpecies extends CMSBase {
                 $fc_array = array();
                 $fc = entity_load('field_collection_item', array($row['value']));
                 reset($fc); $fc = current($fc);
-                $fc_array['field_species_pop_li'] = self::get_field_instrument_name($fc, 'field_species_pop_li');
+                $fc_array['field_instrument'] = self::get_field_instrument_name($fc, 'field_instrument');
                 $fc_array['field_species_pop_v'] = self::get_field_taxonomic_term_name($fc, 'field_species_pop_v', VOC_SPECIES_POPUPATION_NAME);
                 $ret['field_species_pop'][] = $fc_array;
             }
@@ -1528,9 +1528,9 @@ class CMSSpecies extends CMSBase {
                 if ($save) {
                     $rel = array();
                     $rel['field_name'] = 'field_species_pop';
-                    $instrument = CMSLegalInstrument::get_by_name($population['field_species_pop_li']);
+                    $instrument = CMSLegalInstrument::get_by_name($population['field_instrument']);
                     if($instrument) {
-                        $rel['field_species_pop_li'][$node->language][0]['target_id'] = $instrument->nid;
+                        $rel['field_instrument'][$node->language][0]['target_id'] = $instrument->nid;
                     }
 
                     $population_name = CMSUtils::vocabulary_get_or_create_term($population['field_species_pop_v'], VOC_SPECIES_POPUPATION_NAME);
