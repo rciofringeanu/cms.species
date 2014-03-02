@@ -204,11 +204,11 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $pop_obs = CMSBase::get_field_collection_items($node, 'field_species_pop');
         reset($pop_obs);
         $pop_ob1 = current($pop_obs);
-        $this->assertEqual('CMS', CMSBase::get_field_instrument_name($pop_ob1, 'field_species_pop_li'));
+        $this->assertEqual('CMS', CMSBase::get_field_instrument_name($pop_ob1, 'field_instrument'));
         $this->assertEqual('400 pairs',
             CMSBase::get_field_taxonomic_term_name($pop_ob1, 'field_species_pop_v', VOC_SPECIES_POPUPATION_NAME));
         $pop_ob2 = next($pop_obs);
-        $this->assertEqual('AEWA', CMSBase::get_field_instrument_name($pop_ob2, 'field_species_pop_li'));
+        $this->assertEqual('AEWA', CMSBase::get_field_instrument_name($pop_ob2, 'field_instrument'));
         $this->assertEqual('120 pairs',
             CMSBase::get_field_taxonomic_term_name($pop_ob2, 'field_species_pop_v', VOC_SPECIES_POPUPATION_NAME));
 
@@ -354,9 +354,9 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $population = $subject['field_species_pop'];
         $this->assertTrue(is_array($population));
         $this->assertEqual(2, count($population));
-        $this->assertEqual('CMS', $population[0]['field_species_pop_li']);
+        $this->assertEqual('CMS', $population[0]['field_instrument']);
         $this->assertEqual('400 pairs', $population[0]['field_species_pop_v']);
-        $this->assertEqual('AEWA', $population[1]['field_species_pop_li']);
+        $this->assertEqual('AEWA', $population[1]['field_instrument']);
         $this->assertEqual('120 pairs', $population[1]['field_species_pop_v']);
 
         $population_size = $subject['field_species_pop_size'];
@@ -529,14 +529,14 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $node = CMSSpecies::node_create('test');
         $population = array('field_species_pop' =>
                             array(0 =>
-                                  array('field_species_pop_li' => '1',
+                                  array('field_instrument' => '1',
                                         'field_species_pop_v' => '10')));
         CMSSpecies::set_species_population_instrument($node, $population);
         node_save($node);
         $node = node_load(2);
         $this->assertTrue(is_array($node->field_species_pop[$node->language]));
         $field_collection = entity_load('field_collection_item', array(1));
-        $this->assertEqual('1', $field_collection[1]->field_species_pop_li[$node->language][0]['target_id']);
+        $this->assertEqual('1', $field_collection[1]->field_instrument[$node->language][0]['target_id']);
         $this->assertEqual('10', $field_collection[1]->field_species_pop_v[$node->language][0]['value']);
     }
 
@@ -710,11 +710,11 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
             "field_species_range_states_notes" => "range_states_notes",
             "field_species_pop" => array(
                 array(
-                    "field_species_pop_li" => "CMS",
+                    "field_instrument" => "CMS",
                     "field_species_pop_v" => "400 pairs",
                 ),
                 array(
-                    "field_species_pop_li" => "AEWA",
+                    "field_instrument" => "AEWA",
                     "field_species_pop_v" => "120 pairs",
                 ),
             ),

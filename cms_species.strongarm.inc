@@ -96,10 +96,10 @@ function cms_species_strongarm() {
           'weight' => '2',
         ),
         'domain_path' => array(
-          'weight' => '34',
+          'weight' => '1',
         ),
         'path' => array(
-          'weight' => '33',
+          'weight' => '3',
         ),
       ),
       'display' => array(),

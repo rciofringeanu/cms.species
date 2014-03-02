@@ -150,8 +150,8 @@ function api_assessment_info_group($node) {
     $results = array();
     $instruments = entity_load('field_collection_item', array($ids));
     foreach ($instruments as $instrument) {
-        if (isset($instrument->field_species_instrument[$node->language][0])) {
-            $instr['instrument'] = API_SPECIES::get_instrument($instrument->field_species_instrument[$node->language][0]['target_id']);
+        if (isset($instrument->field_instrument[$node->language][0])) {
+            $instr['instrument'] = API_SPECIES::get_instrument($instrument->field_instrument[$node->language][0]['target_id']);
             $instr['date_of_entry'] = $instrument->field_species_instrument_date[$node->language][0]['value'];
             $results []= $instr;
         }
@@ -173,9 +173,9 @@ function api_species_population($node) {
     $results = array();
     $populations = entity_load('field_collection_item', array($ids));
     foreach ($populations as $population) {
-        if (isset($population->field_species_pop_li[$node->language][0])) {
+        if (isset($population->field_instrument[$node->language][0])) {
             $results []= array(
-                'instrument'        => API_SPECIES::get_instrument($population->field_species_pop_li[$node->language][0]['target_id']),
+                'instrument'        => API_SPECIES::get_instrument($population->field_instrument[$node->language][0]['target_id']),
                 'name'   => taxonomy_term_load($population->field_species_pop_v[$node->language][0]['tid'])->name,
             );
         }
