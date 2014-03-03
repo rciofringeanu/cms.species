@@ -349,8 +349,8 @@ function cms_species_update_7032() {
             $instruments_to_add['field_species_instruments'] = array();
             if (array_key_exists('field_species_instruments', $species)) {
                 foreach ($species['field_species_instruments'] as $key => $value) {
-                    if (!in_array($value['field_species_instrument'], $species_instruments)) {
-                        $instruments_to_add['field_species_instruments'][] = array('field_species_instrument' => $value['field_species_instrument']);
+                    if (!in_array($value['field_instrument'], $species_instruments)) {
+                        $instruments_to_add['field_species_instruments'][] = array('field_instrument' => $value['field_instrument']);
                     }
                 }
             }
