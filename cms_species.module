@@ -1366,13 +1366,13 @@ class CMSSpecies extends CMSBase {
         if(!empty($species['field_species_instruments'])) {
             foreach ($species['field_species_instruments'] as $index => $instrument) {
                 $instrument = (array)$instrument;
-                $instrument_name = strtolower(trim($instrument['field_species_instrument']));
+                $instrument_name = strtolower(trim($instrument['field_instrument']));
                 if (!empty($instrument_name)) {
                     if(array_key_exists($instrument_name, $instrument_cache)) {
                         if ($save) {
                             $c = array();
                             $c['field_name'] = 'field_species_instruments';
-                            $c['field_species_instrument'][$node->language][0]['target_id'] = $instrument_cache[$instrument_name];
+                            $c['field_instrument'][$node->language][0]['target_id'] = $instrument_cache[$instrument_name];
                             if (isset($instrument['field_species_instrument_date']) && (!empty($instrument['field_species_instrument_date']))) {
                                 $c['field_species_instrument_date'][$node->language][0]['value'] = $instrument['field_species_instrument_date'];
                             }

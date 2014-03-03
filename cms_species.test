@@ -262,13 +262,13 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $instruments = CMSBase::get_field_collection_items($node, 'field_species_instruments');
         reset($instruments);
         $pop_i1 = current($instruments);
-        $this->assertEqual('CMS', CMSBase::get_field_instrument_name($pop_i1, 'field_species_instrument'));
+        $this->assertEqual('CMS', CMSBase::get_field_instrument_name($pop_i1, 'field_instrument'));
         $this->assertEqual('1999-02-03 00:00:00', CMSBase::get_field_single_value($pop_i1, 'field_species_instrument_date'));
         $pop_i2 = next($instruments);
-        $this->assertEqual('EUROBATS', CMSBase::get_field_instrument_name($pop_i2, 'field_species_instrument'));
+        $this->assertEqual('EUROBATS', CMSBase::get_field_instrument_name($pop_i2, 'field_instrument'));
         $this->assertEqual('2000-02-03 00:00:00', CMSBase::get_field_single_value($pop_i2, 'field_species_instrument_date'));
         $pop_i3 = next($instruments);
-        $this->assertEqual('Birds of prey', CMSBase::get_field_instrument_name($pop_i3, 'field_species_instrument'));
+        $this->assertEqual('Birds of prey', CMSBase::get_field_instrument_name($pop_i3, 'field_instrument'));
         $this->assertEqual('2001-02-03 00:00:00', CMSBase::get_field_single_value($pop_i3, 'field_species_instrument_date'));
 
         // Test related content
@@ -399,13 +399,13 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $this->assertEqual(3, count($instruments));
 
         $i0 = $instruments[0];
-        $this->assertEqual('CMS', $i0['field_species_instrument']);
+        $this->assertEqual('CMS', $i0['field_instrument']);
         $this->assertEqual('1999-02-03 00:00:00', $i0['field_species_instrument_date']);
         $i1 = $instruments[1];
-        $this->assertEqual('EUROBATS', $i1['field_species_instrument']);
+        $this->assertEqual('EUROBATS', $i1['field_instrument']);
         $this->assertEqual('2000-02-03 00:00:00', $i1['field_species_instrument_date']);
         $i2 = $instruments[2];
-        $this->assertEqual('Birds of prey', $i2['field_species_instrument']);
+        $this->assertEqual('Birds of prey', $i2['field_instrument']);
         $this->assertEqual('2001-02-03 00:00:00', $i2['field_species_instrument_date']);
 
         // Test related content
@@ -767,15 +767,15 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
             ),
             "field_species_instruments" => array(
                 array(
-                    'field_species_instrument' => 'CMS',
+                    'field_instrument' => 'CMS',
                     'field_species_instrument_date' => '1999-02-03'
                 ),
                 array(
-                    'field_species_instrument' => 'Eurobats',
+                    'field_instrument' => 'Eurobats',
                     'field_species_instrument_date' => '2000-02-03'
                 ),
                 array(
-                    'field_species_instrument' => 'Birds of Prey',
+                    'field_instrument' => 'Birds of Prey',
                     'field_species_instrument_date' => '2001-02-03'
                 )
             ),
