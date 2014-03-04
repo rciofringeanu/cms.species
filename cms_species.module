@@ -472,10 +472,10 @@ function cms_species_node_view($node, $view_mode, $langcode) {
             if ($view_mode == 'full' && node_is_page($node)) {
                 if (is_theme_admin()) {
                     //Set related data used in template
-                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'document_projects');
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'document_species');
                 } else if (is_theme_frontend()) {
                     //Set related data used in template
-                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'document_projects');
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'document_species');
                 }
             }
             break;
