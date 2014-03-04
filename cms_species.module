@@ -392,19 +392,11 @@ function cms_species_alter_experts_submit(&$form, &$form_state) {
  * Set relation with different content types
  *
  * @param   stdClass    $node
- *
-* @TODO     Create node slug with pathauto
  */
 function cms_species_node_presave($node) {
     if (($node->type == "species")) {
-        //$slug = slug($node->title);
-        //if (empty($node->path['alias'])) {
-        //    $node->path['alias'] = 'species/' . $slug;
-        //}
-        //
-        //path_save($node->path);
-
-        if (isset($node->field_species_genus) && isset($node->field_species_species)) {
+        //TODO  Remove this if no problem spotted: Commented on 04.03.14
+        /*if (isset($node->field_species_genus) && isset($node->field_species_species)) {
             $genus = CMSSpecies::get_field_taxonomic_term_name($node, 'field_species_genus', VOC_SPECIES_GENUS);
             $species = CMSSpecies::get_field_taxonomic_term_name($node, 'field_species_species', VOC_SPECIES_SPECIES);
             $subspecies = CMSSpecies::get_field_taxonomic_term_name($node, 'field_species_subspecies', VOC_SPECIES_SUBSPECIES);
@@ -413,7 +405,7 @@ function cms_species_node_presave($node) {
             if ($subspecies) {
                 $node->title .= ' ' . $subspecies;
             }
-        }
+        }*/
 
         $iucn_data = CMSSpecies::get_species_iucn_data($node->title);
         if (!empty($iucn_data)) {
@@ -464,150 +456,114 @@ function cms_species_node_view($node, $view_mode, $langcode) {
     if(function_exists('cms_theme_node_access') && $node->type == CMSSpecies::$bundle) {
         cms_theme_node_access($node);
     }
-
-    if ($node->type == 'species') {
-        $node->gallery = array();
-        $species_title_slug = CMSUtils::slug($node->title);
-
-        $api_key = variable_get('apikey');
-        $url = 'http://www.arkive.org/api/' . $api_key . '/portlet/latin/' . $species_title_slug . '/10';
-        $curl_handler = curl_init();
-
-        curl_setopt($curl_handler, CURLOPT_URL, $url);
-        curl_setopt($curl_handler,CURLOPT_CONNECTTIMEOUT,2);
-        curl_setopt($curl_handler, CURLOPT_RETURNTRANSFER, 1);
-
-        $data = curl_exec($curl_handler);
-
-        if (!curl_errno($curl_handler)) {
-            $data = json_decode($data);
-
-            if (is_object($data) && empty($data->error)) {
-                $node->gallery = $data->results;
-            }
-        }
-
-        curl_close($curl_handler);
-
-        $node->experts = array();
-//        if (isset($node->field_species_experts) && (!empty($node->field_species_experts))) {
-//            $agent = CMSContacts::agent();
-//            foreach ($node->field_species_experts[$node->language] as $expert) {
-//                $contact = $agent->search_user($expert['value']);
-//                $node->experts[] = $contact;
-//            }
-//        }
-
-        //related content for admin
-        if ($view_mode == 'full' && node_is_page($node) && is_theme_admin()) {
-            $breadcrumb = array();
-            $breadcrumb[] = l(t('Home'), '<front>');
-            $breadcrumb[] = l(t('Species'), 'species/listing');
-            drupal_set_breadcrumb($breadcrumb);
-
-            //Set the counters for related content
-            $view_meetings = views_get_view('meetings');
-            $view_meetings->set_display('species_meetings');
-            $view_meetings->set_arguments(array($node->nid));
-            $view_meetings->execute();
-            $node->meetings_count = $view_meetings->total_rows;
-
-            //Set the counters for related content
-            $view_publications = views_get_view('publications_admin');
-            $view_publications->set_display('species_publications');
-            $view_publications->set_arguments(array($node->nid));
-            $view_publications->execute();
-            $node->publications_count = $view_publications->total_rows;
-
-            //Set the counters for related content
-            $view_projects = views_get_view('project_admin');
-            $view_projects->set_display('species_projects');
-            $view_projects->set_arguments(array($node->nid));
-            $view_projects->execute();
-            $node->projects_count = $view_projects->total_rows;
-
-            //Set the counters for related content
-            $view_national_plans = views_get_view('documents');
-            $view_national_plans->set_display('species_plans');
-            $view_national_plans->set_arguments(array($node->nid));
-            $view_national_plans->execute();
-            $node->national_plans_count = $view_national_plans->total_rows;
-
-            //Set the counters for related content
-            $view_national_reports = views_get_view('documents');
-            $view_national_reports->set_display('species_national_reports');
-            $view_national_reports->set_arguments(array($node->nid));
-            $view_national_reports->execute();
-            $node->national_plans_count = $view_national_reports->total_rows;
-
-            //Set the counters for related content
-            $view_other_documents = views_get_view('documents');
-            $view_other_documents->set_display('species_plans');
-            $view_other_documents->set_arguments(array($node->nid));
-            $view_other_documents->execute();
-            $node->other_documents_count = $view_other_documents->total_rows;
-
-        }
-
-        //related content for front-end
-        if ($view_mode == 'full' && node_is_page($node) && is_theme_frontend()) {
-
-            //Set the counters for related content
-            $view_meetings = views_get_view('meetings');
-            $view_meetings->set_display('species_meetings');
-            $view_meetings->set_arguments(array($node->nid));
-            $view_meetings->execute();
-            $node->meetings_count = $view_meetings->total_rows;
-
-            //Set the counters for related content
-            $view_publications = views_get_view('publications_admin');
-            $view_publications->set_display('species_publications');
-            $view_publications->set_arguments(array($node->nid));
-            $view_publications->execute();
-            $node->publications_count = $view_publications->total_rows;
-
-            //Set the counters for related content
-            $view_projects = views_get_view('project_admin');
-            $view_projects->set_display('species_projects');
-            $view_projects->set_arguments(array($node->nid));
-            $view_projects->execute();
-            $node->projects_count = $view_projects->total_rows;
-
-            //Set the counters for related content
-            $view_national_plans = views_get_view('documents');
-            $view_national_plans->set_display('species_plans');
-            $view_national_plans->set_arguments(array($node->nid));
-            $view_national_plans->execute();
-            $node->national_plans_count = $view_national_plans->total_rows;
-
-            //Set the counters for related content
-            $view_national_reports = views_get_view('documents');
-            $view_national_reports->set_display('species_national_reports');
-            $view_national_reports->set_arguments(array($node->nid));
-            $view_national_reports->execute();
-            $node->national_plans_count = $view_national_reports->total_rows;
-
-            //Set the counters for related content
-            $view_other_documents = views_get_view('documents');
-            $view_other_documents->set_display('species_plans');
-            $view_other_documents->set_arguments(array($node->nid));
-            $view_other_documents->execute();
-            $node->other_documents_count = $view_other_documents->total_rows;
-
-            $node->ammap_data = CMSSpecies::get_range_states_for_ammap($node);
-        }
-    }
-
-    // @TODO to be removed if no problems spotted - commented on 07.02.14
-    /*switch($node->type) {
+    switch ($node->type) {
         case 'country':
-            $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
+            if ($view_mode == 'full' && node_is_page($node)) {
+                if (is_theme_admin()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'country_species');
+                } else if (is_theme_frontend()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'country_species');
+                }
+            }
+            break;
+        case 'document':
+            if ($view_mode == 'full' && node_is_page($node)) {
+                if (is_theme_admin()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'document_species');
+                } else if (is_theme_frontend()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'document_species');
+                }
+            }
             break;
         case 'legal_instrument':
-            $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_instrument', 'field_species_instruments');
+            if ($view_mode == 'full' && node_is_page($node)) {
+                if (is_theme_admin()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'instrument_species');
+                } else if (is_theme_frontend()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'instrument_species');
+                }
+            }
             break;
-    }*/
+        case 'meeting':
+            if ($view_mode == 'full' && node_is_page($node)) {
+                if (is_theme_admin()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'meeting_species');
+                } else if (is_theme_frontend()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'meeting_species');
+                }
+            }
+            break;
+        case 'project':
+            if ($view_mode == 'full' && node_is_page($node)) {
+                if (is_theme_admin()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'project_species');
+                } else if (is_theme_frontend()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'project_species');
+                }
+            }
+            break;
+        case 'publication':
+            if ($view_mode == 'full' && node_is_page($node)) {
+                if (is_theme_admin()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'species_admin', 'publication_species');
+                } else if (is_theme_frontend()) {
+                    //Set related data used in template
+                    CMSBase::set_related_content_from_views($node, 'species', 'front_end_species', 'publication_species');
+                }
+            }
+            break;
+        case 'species':
+            if ($view_mode == 'full' && node_is_page($node)) {
+                $node->gallery = array();
+                $species_title_slug = CMSUtils::slug($node->title);
 
+                $api_key = variable_get('apikey');
+                $url = 'http://www.arkive.org/api/' . $api_key . '/portlet/latin/' . $species_title_slug . '/10';
+                $curl_handler = curl_init();
+
+                curl_setopt($curl_handler, CURLOPT_URL, $url);
+                curl_setopt($curl_handler,CURLOPT_CONNECTTIMEOUT,2);
+                curl_setopt($curl_handler, CURLOPT_RETURNTRANSFER, 1);
+
+                $data = curl_exec($curl_handler);
+
+                if (!curl_errno($curl_handler)) {
+                    $data = json_decode($data);
+
+                    if (is_object($data) && empty($data->error)) {
+                        $node->gallery = $data->results;
+                    }
+                }
+
+                curl_close($curl_handler);
+
+                $node->experts = array();
+                //        if (isset($node->field_species_experts) && (!empty($node->field_species_experts))) {
+                //            $agent = CMSContacts::agent();
+                //            foreach ($node->field_species_experts[$node->language] as $expert) {
+                //                $contact = $agent->search_user($expert['value']);
+                //                $node->experts[] = $contact;
+                //            }
+                //        }
+
+                if (is_theme_frontend()) {
+                    //set data for ammap profile map - front-end
+                    $node->ammap_data = CMSSpecies::get_range_states_for_ammap($node);
+                }
+            }
+            break;
+    }
 }
 
 /**
@@ -707,66 +663,6 @@ function cms_species_family_display($nid) {
         drupal_access_denied();
         drupal_exit();
     }
-}
-
-/**
- * Implements hook_entity_view($entity, $type, $view_mode, $langcode)
- * @TODO to be removed if no problems spotted - commented on 07.02.14
- */
-/*function cms_species_entity_view($entity, $type, $view_mode, $langcode){
-    if($type != 'node' || $view_mode !== 'full') {
-        return;
-    }
-
-    $node = node_load($entity->nid);
-
-    // Inject the projects into the country profile page
-     switch($entity->type) {
-        case CMSSpecies::$bundle_country_module:
-            $node->content[CMSSpecies::$field_species_country] = _species_get_species_render($node, $view_mode, 'table__species_template_country', CMSSpecies::$field_species_country, CMSSpecies::$bundle_country_module, 'country');
-            break;
-        case CMSSpecies::$bundle_instrument_module:
-            $node->content[CMSSpecies::$field_species_instrument] = _species_get_species_render($node, $view_mode, 'table__species_template_instrument', CMSSpecies::$field_species_instrument, CMSSpecies::$bundle_instrument_module, 'CMS Instrument');
-            break;
-    }
-}*/
-
-
-function _species_get_species_render($node, $view_mode, $theme, $field, $bundle, $type) {
-    $species = $node->species[$node->language];
-    $classes = array('table', 'table-striped', 'table-bordered');
-    if (count($species) > 10) {
-        $classes[] = 'dataTable';
-    }
-
-    $rows = array();
-    foreach($species as $spec) {
-        $row = $spec['entity'];
-        $node_url = node_uri($row);
-        $rows[] = array(
-            'data' => array(
-                sprintf('<a href="/%s">%s</a>', $node_url['path'], $row->title))
-        );
-    }
-    return array(
-        '#theme' => $theme,
-        '#weight' => 100, //@todo: computed
-        '#access' => TRUE, '#label_display' => 'hidden', '#view_mode' => $view_mode,
-        '#language' => $node->language,
-        '#field_name' => $field,
-        '#field_type' => 'entityreference',
-        '#entity_type' => 'node',
-        '#bundle' => $bundle,
-        '#items' => $species,
-        '#header' => array(t('Scientific name')),
-        '#rows' => $rows,
-        '#attributes' => array('class' => $classes),
-        '#caption' => FALSE,
-        '#colgroups' => array(),
-        '#sticky' => TRUE,
-        '#empty' => t('There are no species for this ' . $type),
-        '#settings' => array()
-    ) + $species;
 }
 
 
@@ -913,7 +809,8 @@ function cms_species_field_extra_fields() {
  * Attach $node->species to country nodes for rendering of related species
  */
 function cms_species_node_load($nodes, $types) {
-    foreach($nodes as $node) {
+    //TODO  Remove this if no problem spotted: Commented on 04.03.14
+    /*foreach($nodes as $node) {
         switch($node->type) {
             case CMSSpecies::$bundle_country_module:
                 $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
@@ -940,7 +837,7 @@ function cms_species_node_load($nodes, $types) {
 
             default: break;
         }
-    }
+    }*/
 }
 
 
