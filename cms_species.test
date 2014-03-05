@@ -194,10 +194,10 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $rs_obs = CMSBase::get_field_collection_items($node, 'field_species_range_states');
         reset($rs_obs);
         $rs_ob1 = current($rs_obs);
-        $this->assertEqual('AO', CMSBase::get_field_country_code($rs_ob1, 'field_species_range_state'));
+        $this->assertEqual('AO', CMSBase::get_field_country_code($rs_ob1, 'field_country'));
         $this->assertEqual('territories 1', CMSBase::get_field_single_value($rs_ob1, 'field_species_territories'));
         $rs_ob2 = next($rs_obs);
-        $this->assertEqual('CM', CMSBase::get_field_country_code($rs_ob2, 'field_species_range_state'));
+        $this->assertEqual('CM', CMSBase::get_field_country_code($rs_ob2, 'field_country'));
         $this->assertEqual('territories 2', CMSBase::get_field_single_value($rs_ob2, 'field_species_territories'));
         $this->assertEqual($species['field_species_range_states_notes'], CMSBase::get_field_single_value($node, 'field_species_range_states_notes'));
         // field_species_pop
@@ -342,11 +342,11 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
 
         $range_states = $subject['field_species_range_states'];
         $this->assertEqual(array(
-            'field_species_range_state' => 'AO',
+            'field_country' => 'AO',
             'field_species_territories' => 'territories 1'
         ), $range_states[0]);
         $this->assertEqual(array(
-            'field_species_range_state' => 'CM',
+            'field_country' => 'CM',
             'field_species_territories' => 'territories 2'
         ), $range_states[1]);
         $this->assertEqual($species['field_species_range_states_notes'], $subject['field_species_range_states_notes']);
@@ -575,7 +575,7 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $node = node_load(1);
         $this->assertTrue(is_array($node->field_species_range_states[$node->language]));
         $field_collection = entity_load('field_collection_item', array(1));
-        $this->assertEqual('AO', $field_collection[1]->field_species_range_state[$node->language][0]['iso2']);
+        $this->assertEqual('AO', $field_collection[1]->field_country[$node->language][0]['iso2']);
         $this->assertEqual('territories 1', $field_collection[1]->field_species_territories[$node->language][0]['value']);
     }
 
@@ -704,8 +704,8 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
             "field_species_iucn_web_srv" => "http://www.iucn.org/field_species_iucn_web_srv",
             "field_species_notes" => "field_species_notes",
             "field_species_range_states" => array(
-                array("field_species_range_state" => "angola", "field_species_territories" => "territories 1"),
-                array("field_species_range_state" => "cameroon", "field_species_territories" => "territories 2")
+                array("field_country" => "angola", "field_species_territories" => "territories 1"),
+                array("field_country" => "cameroon", "field_species_territories" => "territories 2")
             ),
             "field_species_range_states_notes" => "range_states_notes",
             "field_species_pop" => array(
@@ -794,7 +794,7 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
 
         $c = array(
             'field_name' => 'field_species_range_states',
-            'field_species_range_state' => array($s1->language => array(0 => array ('target_id' => $ro->nid)))
+            'field_country' => array($s1->language => array(0 => array ('target_id' => $ro->nid)))
         );
         $entity = entity_create('field_collection_item', $c);
         $entity->setHostEntity('node', $s1);
@@ -802,7 +802,7 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
 
         $c = array(
             'field_name' => 'field_species_range_states',
-            'field_species_range_state' => array($s1->language => array(0 => array ('target_id' => $ro->nid)))
+            'field_country' => array($s1->language => array(0 => array ('target_id' => $ro->nid)))
         );
         $entity = entity_create('field_collection_item', $c);
         $entity->setHostEntity('node', $s2);
@@ -810,7 +810,7 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
 
         $c = array(
             'field_name' => 'field_species_range_states',
-            'field_species_range_state' => array($s3->language => array(0 => array ('target_id' => $ro->nid)))
+            'field_country' => array($s3->language => array(0 => array ('target_id' => $ro->nid)))
         );
         $entity = entity_create('field_collection_item', $c);
         $entity->setHostEntity('node', $s3);

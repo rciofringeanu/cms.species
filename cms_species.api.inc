@@ -236,9 +236,9 @@ function api_species_range_states($node) {
     $ranges = entity_load('field_collection_item', array($ids));
     foreach ($ranges as $range) {
         $result = API_SPECIES::set_api_fields_coll_field(API_SPECIES::$range_states_fields, $range, $node->language);
-        if (isset($range->field_species_range_state[$node->language][0])) {
-            $result[API_SPECIES::$range_states_fields['field_species_range_state']] =
-                API_SPECIES::get_country($range->field_species_range_state[$node->language][0]['target_id']);
+        if (isset($range->field_country[$node->language][0])) {
+            $result[API_SPECIES::$range_states_fields['field_country']] =
+                API_SPECIES::get_country($range->field_country[$node->language][0]['target_id']);
         }
         $results []= $result;
     }
@@ -349,7 +349,7 @@ class API_SPECIES {
     )   ;
 
     static $range_states_fields = array (
-        "field_species_range_state" => "range_state",
+        "field_country" => "range_state",
         "field_species_territories" => "territories",
         "field_species_range_state_status" => "status",
     );

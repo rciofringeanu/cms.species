@@ -403,11 +403,11 @@ function cms_species_update_7033() {
             $range_states_to_add['field_species_range_states'] = array();
             $added_range_states_iso2 = array();
             foreach ($species['field_species_range_states'] as $key => $value) {
-                $iso2 = $value['field_species_range_state'];
+                $iso2 = $value['field_country'];
                 if (!in_array($iso2, $species_range_states)) {
                     $add = TRUE;
                     $added_range_states_iso2[] = $iso2;
-                    $range_states_to_add['field_species_range_states'][] = array('field_species_range_state' => $iso2);
+                    $range_states_to_add['field_species_range_states'][] = array('field_country' => $iso2);
                 }
             }
 

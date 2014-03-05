@@ -813,7 +813,7 @@ function cms_species_node_load($nodes, $types) {
     /*foreach($nodes as $node) {
         switch($node->type) {
             case CMSSpecies::$bundle_country_module:
-                $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_species_range_state', 'field_species_range_states');
+                $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_country', 'field_species_range_states');
                 $node->species[$node->language] = array();
                 foreach($species as $row) {
                     $node->species[$node->language][] = array(
@@ -945,7 +945,7 @@ class CMSSpecies extends CMSBase {
                 $fc_array = array();
                 $fc = entity_load('field_collection_item', array($row['value']));
                 reset($fc); $fc = current($fc);
-                $fc_array['field_species_range_state'] =  self::get_field_country_code($fc, 'field_species_range_state');
+                $fc_array['field_country'] =  self::get_field_country_code($fc, 'field_country');
                 self::get_field_single_value($fc, 'field_species_territories', $fc_array);
                 self::get_field_single_value($fc, 'field_species_range_state_status', $fc_array);
                 $ret['field_species_range_states'][] = $fc_array;
@@ -1516,12 +1516,12 @@ class CMSSpecies extends CMSBase {
         if(!empty($species['field_species_range_states'])) {
             foreach ($species['field_species_range_states'] as $index => $country) {
                 $country = (array)$country;
-                $country_ob = Country::get_by_name_or_iso2($country['field_species_range_state']);
+                $country_ob = Country::get_by_name_or_iso2($country['field_country']);
                 if (!empty($country_ob)) {
                     if ($save) {
                         $c = array();
                         $c['field_name'] = 'field_species_range_states';
-                        $c['field_species_range_state'][$node->language][0]['target_id'] = $country_ob->nid;
+                        $c['field_country'][$node->language][0]['target_id'] = $country_ob->nid;
                         if (!empty($country['field_species_territories'])) {
                             $c['field_species_territories'][$node->language][0]['value'] = $country['field_species_territories'];
                         }
@@ -1537,11 +1537,11 @@ class CMSSpecies extends CMSBase {
                         $entity->setHostEntity('node', $node);
 
                     }else {
-                        $node->field_species_range_states[$node->language][$index]['field_species_range_state'] = $country_ob->title;
+                        $node->field_species_range_states[$node->language][$index]['field_country'] = $country_ob->title;
                         $node->field_species_range_states[$node->language][$index]['field_species_territories'] = $country['field_species_territories'];
                     }
                 } else {
-                    echo sprintf("Could not identify range state '%s' for species '%s'\n", $country['field_species_range_state'], $species['title']);
+                    echo sprintf("Could not identify range state '%s' for species '%s'\n", $country['field_country'], $species['title']);
                 }
             }
         }
@@ -1834,7 +1834,7 @@ class CMSSpecies extends CMSBase {
         }
         $inner = new EntityFieldQuery();
         $inner_r = $inner->entityCondition('entity_type', 'field_collection_item')
-            ->fieldCondition('field_species_range_state', 'target_id', $id_country, '=')
+            ->fieldCondition('field_country', 'target_id', $id_country, '=')
             ->execute();
         if(!empty($inner_r['field_collection_item'])) {
             $keys = array_keys($inner_r['field_collection_item']);
@@ -1890,8 +1890,8 @@ class CMSSpecies extends CMSBase {
         }
         $result = entity_load('field_collection_item', $countries_fc_ids);
         foreach ($result as  $field_col) {
-            $country_ids []= $field_col->field_species_range_state[$node->language][0]['target_id'];
-            $countries_field_col[$field_col->field_species_range_state[$node->language][0]['target_id']]= $field_col;
+            $country_ids []= $field_col->field_country[$node->language][0]['target_id'];
+            $countries_field_col[$field_col->field_country[$node->language][0]['target_id']]= $field_col;
         }
 
         $query = new EntityFieldQuery();
