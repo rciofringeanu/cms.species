@@ -1041,8 +1041,8 @@ function cms_species_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_species_range_states-field_species_range_state'
-  $field_instances['field_collection_item-field_species_range_states-field_species_range_state'] = array(
+  // Exported field_instance: 'field_collection_item-field_species_range_states-field_country'
+  $field_instances['field_collection_item-field_species_range_states-field_country'] = array(
     'bundle' => 'field_species_range_states',
     'default_value' => NULL,
     'deleted' => 0,
@@ -1055,11 +1055,11 @@ function cms_species_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 2,
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'field_collection_item',
-    'field_name' => 'field_species_range_state',
+    'field_name' => 'field_country',
     'label' => 'Range State',
     'required' => 0,
     'settings' => array(
@@ -1070,7 +1070,7 @@ function cms_species_field_default_field_instances() {
       'active' => 1,
       'module' => 'options',
       'settings' => array(
-        'apply_chosen' => 0,
+        'apply_chosen' => 1,
       ),
       'type' => 'options_select',
       'weight' => 0,
@@ -1107,7 +1107,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -1123,7 +1123,7 @@ function cms_species_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_plain',
-        'weight' => 1,
+        'weight' => 0,
       ),
     ),
     'enterprise_edit_form_display' => '',
@@ -1143,7 +1143,7 @@ function cms_species_field_default_field_instances() {
         'rows' => 1,
       ),
       'type' => 'text_textarea',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
