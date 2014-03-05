@@ -1147,6 +1147,42 @@ function cms_species_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'field_collection_item-field_species_status_per_country-field_country'
+  $field_instances['field_collection_item-field_species_status_per_country-field_country'] = array(
+    'bundle' => 'field_species_status_per_country',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_country',
+    'label' => 'Country',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 1,
+      ),
+      'type' => 'options_select',
+      'weight' => 0,
+    ),
+  );
+
   // Exported field_instance: 'field_collection_item-field_species_status_per_country-field_species_aewa_status'
   $field_instances['field_collection_item-field_species_status_per_country-field_species_aewa_status'] = array(
     'bundle' => 'field_species_status_per_country',
@@ -1159,7 +1195,7 @@ function cms_species_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 1,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -1178,42 +1214,6 @@ function cms_species_field_default_field_instances() {
       ),
       'type' => 'options_select',
       'weight' => 2,
-    ),
-  );
-
-  // Exported field_instance: 'field_collection_item-field_species_status_per_country-field_species_status_country'
-  $field_instances['field_collection_item-field_species_status_per_country-field_species_status_country'] = array(
-    'bundle' => 'field_species_status_per_country',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'field_collection_item',
-    'field_name' => 'field_species_status_country',
-    'label' => 'Country',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 0,
-      ),
-      'type' => 'options_select',
-      'weight' => 1,
     ),
   );
 
