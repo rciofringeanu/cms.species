@@ -1906,7 +1906,7 @@ class CMSSpecies extends CMSBase {
         $fields = field_info_instances('node', 'country');
 
         // Put all field names you want to load
-        $field_names = array('field_story_image', 'field_country_official_name');
+        $field_names = array('field_country_official_name');
 
         foreach ($field_names AS $field_name) {
             // Get id of body field
