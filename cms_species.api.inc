@@ -257,9 +257,9 @@ function api_species_status_per_country($node) {
                 taxonomy_term_load($country->field_species_aewa_status[$node->language][0]['tid'])->name;
         }
 
-        if (isset($country->field_species_status_country[$node->language][0])) {
-            $result[API_SPECIES::$status_country_fields['field_species_status_country']] =
-                node_load($country->field_species_status_country[$node->language][0]['target_id'])->title;
+        if (isset($country->field_country[$node->language][0])) {
+            $result[API_SPECIES::$status_country_fields['field_country']] =
+                node_load($country->field_country[$node->language][0]['target_id'])->title;
         }
 
         $results []= $result;
@@ -355,7 +355,7 @@ class API_SPECIES {
     );
 
     static $status_country_fields = array (
-        "field_species_status_country" => "country",
+        "field_country" => "country",
         "field_species_aewa_status" => "status",
     );
 

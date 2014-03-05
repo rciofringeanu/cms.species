@@ -2126,52 +2126,6 @@ function cms_species_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_species_status_country'
-  $field_bases['field_species_status_country'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_species_status_country',
-    'foreign keys' => array(
-      'node' => array(
-        'columns' => array(
-          'target_id' => 'nid',
-        ),
-        'table' => 'node',
-      ),
-    ),
-    'indexes' => array(
-      'target_id' => array(
-        0 => 'target_id',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'entityreference',
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'handler' => 'base',
-      'handler_settings' => array(
-        'behaviors' => array(
-          'views-select-list' => array(
-            'status' => 0,
-          ),
-        ),
-        'sort' => array(
-          'direction' => 'ASC',
-          'property' => 'title',
-          'type' => 'property',
-        ),
-        'target_bundles' => array(
-          'country' => 'country',
-        ),
-      ),
-      'target_type' => 'node',
-    ),
-    'translatable' => 0,
-    'type' => 'entityreference',
-  );
-
   // Exported field_base: 'field_species_status_per_country'
   $field_bases['field_species_status_per_country'] = array(
     'active' => 1,

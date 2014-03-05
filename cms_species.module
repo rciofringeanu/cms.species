@@ -959,7 +959,7 @@ class CMSSpecies extends CMSBase {
                 $fc_array = array();
                 $fc = entity_load('field_collection_item', array($row['value']));
                 reset($fc); $fc = current($fc);
-                $fc_array['field_species_status_country'] =  self::get_field_country_code($fc, 'field_species_status_country');
+                $fc_array['field_country'] =  self::get_field_country_code($fc, 'field_country');
                 $fc_array['field_species_aewa_status'] = self::get_field_taxonomic_term_name($fc, 'field_species_aewa_status', VOC_SPECIES_AEWA_COUNTRY_STATUS);
                 $ret['field_species_status_per_country'][] = $fc_array;
             }
@@ -1557,7 +1557,7 @@ class CMSSpecies extends CMSBase {
         if(!empty($species['field_species_status_per_country'])) {
             foreach ($species['field_species_status_per_country'] as $index => $status) {
                 $status = (array)$status;
-                $country_ob = Country::get_by_name_or_iso2($status['field_species_status_country']);
+                $country_ob = Country::get_by_name_or_iso2($status['field_country']);
                 if (!empty($country_ob)) {
                     $term = CMSUtils::vocabulary_get_or_create_term($status['field_species_aewa_status'], VOC_SPECIES_AEWA_COUNTRY_STATUS);
                     $status_name = ($term) ? $term->name : '';
@@ -1566,20 +1566,20 @@ class CMSSpecies extends CMSBase {
                     if ($save) {
                         $c = array();
                         $c['field_name'] = 'field_species_status_per_country';
-                        $c['field_species_status_country'][$node->language][0]['target_id'] = $country_ob->nid;
+                        $c['field_country'][$node->language][0]['target_id'] = $country_ob->nid;
                         if ($status_tid) {
                             $c['field_species_aewa_status'][$node->language][0]['tid'] = $status_tid;
                         }
                         $entity = entity_create('field_collection_item', $c);
                         $entity->setHostEntity('node', $node);
                     }else {
-                        $node->field_species_status_per_country[$node->language][$index]['field_species_status_country'] = $country_ob->title;
+                        $node->field_species_status_per_country[$node->language][$index]['field_country'] = $country_ob->title;
                         if ($status_name) {
                             $node->field_species_status_per_country[$node->language][$index]['field_species_aewa_status'] = $status_name;
                         }
                     }
                 } else {
-                    echo sprintf("Could not identify country '%s' for species '%s'\n", $status['field_species_status_country'], $species['title']);
+                    echo sprintf("Could not identify country '%s' for species '%s'\n", $status['field_country'], $species['title']);
                 }
             }
         }
