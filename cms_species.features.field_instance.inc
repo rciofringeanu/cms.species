@@ -1945,6 +1945,7 @@ function cms_species_field_default_field_instances() {
       'file_directory' => 'species',
       'file_extensions' => 'bmp tiff jpg jpeg gif png raw svg psd cdr ai dwg',
       'image_field_caption' => 0,
+      'image_field_caption_format' => 'plain_text',
       'max_filesize' => '50 MB',
       'max_resolution' => '',
       'min_resolution' => '',
