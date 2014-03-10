@@ -310,31 +310,34 @@ function cms_species_form_alter(&$form, &$form_state, $form_id) {
                     '#value' => $current_instrument_id,
                 );
 
-                $breadcrumb = array();
-                $breadcrumb[] = l(t('Home'), '<front>');
-                drupal_set_breadcrumb($breadcrumb);
-
-            } else if ($form['#id'] == 'views-exposed-form-front-end-species-list') {
+            } else if ($form['#id'] == 'views-exposed-form-front-end-species-species-list') {
                 $instruments[''] = t('Any');
                 $instruments = $instruments + CMSLegalInstrument::get_mapped_instruments($title_as_key = FALSE);
 
                 $current_profile = CMSUtils::get_current_profile();
-                foreach ($instruments as $id => $name) {
-                    if (strtolower($name) == $current_profile) {
-                        $current_instrument_id = $id;
+                $current_instrument_id = '';
+                $instruments = CMSLegalInstrument::get_mapped_instruments($title_as_key = FALSE);
+                // For other instruments than CMS, set the instrument as the default filter
+                if($current_profile != 'cms') {
+                    foreach ($instruments as $id => $name) {
+                        if (strtolower($name) == $current_profile) {
+                            $current_instrument_id = $id;
+                        }
                     }
                 }
-                $instrument_selected = (isset($_GET[FILTER_SPECIES_INSTRUMENT_FIELD])
-                    && (in_array($_GET[FILTER_SPECIES_INSTRUMENT_FIELD], array_keys($instruments))))
-                    ? $_GET[FILTER_SPECIES_INSTRUMENT_FIELD] : (string)$current_instrument_id;
+                if(isset($_GET[FILTER_SPECIES_INSTRUMENT_FIELD])) {
+                    $current_instrument_id = $_GET[FILTER_SPECIES_INSTRUMENT_FIELD];
+                }
+                asort($instruments);
+                $instruments = array('' => t('Any')) + $instruments;
 
                 $form[FILTER_SPECIES_INSTRUMENT_FIELD] = array(
                     '#type' => 'select',
                     '#prefix' => '<div id="dropdown-family-replace">',
                     '#suffix' => '</div>',
                     '#options' => $instruments,
-                    '#default_value' => $instrument_selected,
-                    '#value' => $instrument_selected,
+                    '#default_value' => $current_instrument_id,
+                    '#value' => $current_instrument_id,
                 );
             }
             break;
@@ -560,7 +563,11 @@ function cms_species_node_view($node, $view_mode, $langcode) {
 
                 if (is_theme_frontend()) {
                     //set data for ammap profile map - front-end
-                    $node->ammap_data = CMSSpecies::get_range_states_for_ammap($node);
+                    if (CMSUtils::get_current_profile() == 'aewa') {
+                        $node->ammap_data = CMSSpecies::get_aewa_countries_status_for_ammap($node);
+                    } else {
+                        $node->ammap_data = CMSSpecies::get_range_states_for_ammap($node);
+                    }
                 }
             }
             break;
@@ -1848,13 +1855,77 @@ class CMSSpecies extends CMSBase {
      */
     public static function get_range_states_for_ammap($node) {
         $countries_fc_ids = array();
-        foreach ($node->field_species_range_states[$node->language] as $country) {
+        $langcode = field_language('node', $node, 'field_species_range_states');
+        foreach ($node->field_species_range_states[$langcode] as $country) {
+            $countries_fc_ids []= $country['value'];
+        }
+
+        $result = entity_load('field_collection_item', $countries_fc_ids);
+        foreach ($result as  $field_col) {
+            $country_ids []= $field_col->field_country[$langcode][0]['target_id'];
+            $countries_field_col[$field_col->field_country[$langcode][0]['target_id']]= $field_col;
+        }
+        $query = new EntityFieldQuery();
+        $query->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', 'country')
+            ->propertyCondition('status', 1)
+            ->propertyCondition('nid', $country_ids );
+        $result = $query->execute();
+        $countries = $result['node'];
+
+        // Get all fields attached to a given node type
+        $fields = field_info_instances('node', 'country');
+
+        // Put all field names you want to load
+        $field_names = array('field_country_official_name');
+
+        foreach ($field_names AS $field_name) {
+            // Get id of body field
+            $field_id = $fields[$field_name]['field_id'];
+
+            // Attach a field of selected id only to get value for it
+            field_attach_load('node', $countries, FIELD_LOAD_CURRENT, array('field_id' => $field_id));
+        }
+
+        //get country statuses
+        $countries_statuses = array();
+        foreach($countries_field_col as $country_id => $field_col) {
+            $countries_statuses[$country_id] = '-';
+            if (!empty($field_col->field_species_range_state_status[$langcode][0]['value'])) {
+                $countries_statuses[$country_id] = $field_col->field_species_range_state_status[$langcode][0]['value'];
+            }
+        }
+
+        foreach ($countries as $nid => $country) {
+            $data []= array(
+                //'title' => $country->field_country_official_name[$node->language][0]['value'],
+                'iso2'  => $country->field_country_iso2[$langcode][0]['value'],
+                'customData'  => '',
+                'legend' => ucfirst($countries_statuses[$nid]),
+                'url' => drupal_lookup_path('alias',"node/" . $country->nid),
+                'color' => ''
+            );
+        }
+        return $data;
+    }
+
+    /**
+     * Function used in template to get data for front-end species profile page
+     * @param $node
+     *
+     * @return array - $data returned should be used in template file by drupal_ammap_render_map() to render the map
+     * @author Dragos Dumitrescu
+     */
+    public static function get_aewa_countries_status_for_ammap($node) {
+        $langcode = field_language('node', $node, 'field_species_status_per_country');
+        $countries_fc_ids = array();
+        foreach ($node->field_species_status_per_country[$langcode] as $country) {
             $countries_fc_ids []= $country['value'];
         }
         $result = entity_load('field_collection_item', $countries_fc_ids);
         foreach ($result as  $field_col) {
-            $country_ids []= $field_col->field_country[$node->language][0]['target_id'];
-            $countries_field_col[$field_col->field_country[$node->language][0]['target_id']]= $field_col;
+            $country_ids []= $field_col->field_country[$langcode][0]['target_id'];
+            $countries_field_col[$field_col->field_country[$langcode][0]['target_id']]= $field_col;
         }
 
         $query = new EntityFieldQuery();
@@ -1878,12 +1949,24 @@ class CMSSpecies extends CMSBase {
             // Attach a field of selected id only to get value for it
             field_attach_load('node', $countries, FIELD_LOAD_CURRENT, array('field_id' => $field_id));
         }
+
+        //get country statuses
+        $countries_statuses = array();
+        foreach($countries_field_col as $country_id => $field_col) {
+            $countries_statuses[$country_id] = '-';
+            if (!empty($field_col->field_species_aewa_status[$langcode][0]['tid'])) {
+                $tid = $field_col->field_species_aewa_status[$langcode][0]['tid'];
+                $term = taxonomy_term_load($tid);
+                $countries_statuses[$country_id]= (!empty($term->name)) ? $term->name : '';
+            }
+        }
+
         foreach ($countries as $nid => $country) {
             $data []= array(
                 //'title' => $country->field_country_official_name[$node->language][0]['value'],
-                'iso2'  => $country->field_country_iso2[$node->language][0]['value'],
+                'iso2'  => $country->field_country_iso2[$langcode][0]['value'],
                 'customData'  => '',
-                'legend' => '',
+                'legend' => $countries_statuses[$nid],
                 'url' => drupal_lookup_path('alias',"node/" . $country->nid),
                 'color' => ''
             );
