@@ -1963,7 +1963,7 @@ class CMSSpecies extends CMSBase {
 
         foreach ($countries as $nid => $country) {
             $data []= array(
-                //'title' => $country->field_country_official_name[$node->language][0]['value'],
+                'name' => $country->field_country_official_name[$node->language][0]['value'],
                 'iso2'  => $country->field_country_iso2[$langcode][0]['value'],
                 'customData'  => '',
                 'legend' => $countries_statuses[$nid],
