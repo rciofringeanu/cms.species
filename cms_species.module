@@ -409,11 +409,12 @@ function cms_species_node_presave($node) {
 
         $iucn_data = CMSSpecies::get_species_iucn_data($node->title);
         if (!empty($iucn_data)) {
-            if ((!isset($node->field_species_iucn_status)) || (empty($node->field_species_iucn_status[$node->language]))) {
-                $node->field_species_iucn_status[$node->language][0]['value'] = $iucn_data['field_species_iucn_status'];
+            $langcode = field_language('node', $node, 'field_species_iucn_status');
+            if ((!isset($node->field_species_iucn_status)) || (empty($node->field_species_iucn_status[$langcode]))) {
+                $node->field_species_iucn_status[$langcode][0]['value'] = $iucn_data['field_species_iucn_status'];
             }
-            if ((!isset($node->field_species_iucn_web_srv)) || (empty($node->field_species_iucn_web_srv[$node->language]))) {
-                $node->field_species_iucn_web_srv[$node->language][0]['value'] = $iucn_data['field_species_iucn_web_srv'];
+            if ((!isset($node->field_species_iucn_web_srv)) || (empty($node->field_species_iucn_web_srv[$langcode]))) {
+                $node->field_species_iucn_web_srv[$langcode][0]['value'] = $iucn_data['field_species_iucn_web_srv'];
             }
         }
     }
@@ -800,44 +801,6 @@ function cms_species_field_extra_fields() {
         ),
     );
     return $extra;
-}
-
-
-/**
- * Implements hook_node_load()
- *
- * Attach $node->species to country nodes for rendering of related species
- */
-function cms_species_node_load($nodes, $types) {
-    //TODO  Remove this if no problem spotted: Commented on 04.03.14
-    /*foreach($nodes as $node) {
-        switch($node->type) {
-            case CMSSpecies::$bundle_country_module:
-                $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_country', 'field_species_range_states');
-                $node->species[$node->language] = array();
-                foreach($species as $row) {
-                    $node->species[$node->language][] = array(
-                        'target_id' => $row->nid,
-                        'entity' => $row,
-                        'access' => TRUE
-                    );
-                }
-                break;
-            case CMSSpecies::$bundle_instrument_module:
-                $species = CMSSpecies::get_species_for_content_type($node->nid, 'field_instrument', 'field_species_instruments');
-                $node->species[$node->language] = array();
-                foreach($species as $row) {
-                    $node->species[$node->language][] = array(
-                        'target_id' => $row->nid,
-                        'entity' => $row,
-                        'access' => TRUE
-                    );
-                }
-                break;
-
-            default: break;
-        }
-    }*/
 }
 
 
