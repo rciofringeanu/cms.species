@@ -269,7 +269,7 @@ function api_species_status_per_country($node) {
 
 
 /**
- * Function used in Services views to get  field_species_threats field colelction's field values
+ * Function used in Services views to get  field_species_threats field collection's field values
  *
  * @author Dragos Dumitrescu
  */
@@ -283,9 +283,9 @@ function api_species_threats($node) {
     foreach ($threats as $threat) {
         $result = API_SPECIES::set_api_fields_coll_field(API_SPECIES::$threats, $threat, $node->language);
 
-        if (isset($threat->field_species_threat[$node->language][0])) {
-            $result[API_SPECIES::$threats['field_species_threat']] =
-                taxonomy_term_load($threat->field_species_threat[$node->language][0]['tid'])->name;
+        if (isset($threat->field_threats[$node->language][0])) {
+            $result[API_SPECIES::$threats['field_threats']] =
+                taxonomy_term_load($threat->field_threats[$node->language][0]['tid'])->name;
         }
 
         $results []= $result;
@@ -361,7 +361,7 @@ class API_SPECIES {
 
     static $threats = array (
         "field_species_threat_notes" => "notes",
-        "field_species_threat" => "threat",
+        "field_threats" => "threat",
     );
 
     static $term_reference = array(

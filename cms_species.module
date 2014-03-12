@@ -977,7 +977,7 @@ class CMSSpecies extends CMSBase {
                 $fc_array = array();
                 $fc = entity_load('field_collection_item', array($row['value']));
                 reset($fc); $fc = current($fc);
-                $fc_array['field_species_threat'] = self::get_field_taxonomic_term_name($fc, 'field_species_threat', VOC_THREATS);
+                $fc_array['field_threats'] = self::get_field_taxonomic_term_name($fc, 'field_threats', VOC_THREATS);
                 self::get_field_single_value($fc, 'field_species_threat_notes', $fc_array);
                 $ret['field_species_threats'][] = $fc_array;
             }
@@ -1597,8 +1597,8 @@ class CMSSpecies extends CMSBase {
                 $row = (array)$row;
                 if ($save) {
                     $rel = array();
-                    $term = CMSUtils::vocabulary_get_or_create_term($row['field_species_threat'], VOC_THREATS);
-                    $rel['field_species_threat'][$node->language][0]['tid'] = $term->tid;
+                    $term = CMSUtils::vocabulary_get_or_create_term($row['field_threats'], VOC_THREATS);
+                    $rel['field_threats'][$node->language][0]['tid'] = $term->tid;
                     $v = empty($row['field_species_threat_notes']) ? '' : $row['field_species_threat_notes'];
                     $rel['field_species_threat_notes'][$node->language][0]['value'] = $v;
                     $entity = entity_create('field_collection_item', $rel);
