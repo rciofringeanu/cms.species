@@ -252,10 +252,10 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
         $th_obs = CMSBase::get_field_collection_items($node, 'field_species_threats');
         reset($th_obs);
         $t1 = current($th_obs);
-        $this->assertEqual('Threat 1', CMSBase::get_field_taxonomic_term_name($t1, 'field_species_threat', VOC_THREATS));
+        $this->assertEqual('Threat 1', CMSBase::get_field_taxonomic_term_name($t1, 'field_threats', VOC_THREATS));
         $this->assertEqual('Threat notes 1', CMSBase::get_field_single_value($t1, 'field_species_threat_notes'));
         $t2 = next($th_obs);
-        $this->assertEqual('Threat 2', CMSBase::get_field_taxonomic_term_name($t2, 'field_species_threat', VOC_THREATS));
+        $this->assertEqual('Threat 2', CMSBase::get_field_taxonomic_term_name($t2, 'field_threats', VOC_THREATS));
         $this->assertEqual('Threat notes 2', CMSBase::get_field_single_value($t2, 'field_species_threat_notes'));
 
         // field_species_instruments
@@ -757,11 +757,11 @@ class CMSSpeciesWebTestCase extends CMSWebTestCase {
             ),
             "field_species_threats" => array(
                 array(
-                    'field_species_threat' => 'Threat 1',
+                    'field_threats' => 'Threat 1',
                     'field_species_threat_notes' => 'Threat notes 1'
                 ),
                 array(
-                    'field_species_threat' => 'Threat 2',
+                    'field_threats' => 'Threat 2',
                     'field_species_threat_notes' => 'Threat notes 2'
                 )
             ),
