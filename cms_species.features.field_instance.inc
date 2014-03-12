@@ -1217,40 +1217,6 @@ function cms_species_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_species_threats-field_species_threat'
-  $field_instances['field_collection_item-field_species_threats-field_species_threat'] = array(
-    'bundle' => 'field_species_threats',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
-      ),
-    ),
-    'entity_type' => 'field_collection_item',
-    'field_name' => 'field_species_threat',
-    'label' => 'Threat',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 0,
-      ),
-      'type' => 'options_select',
-      'weight' => 3,
-    ),
-  );
-
   // Exported field_instance: 'field_collection_item-field_species_threats-field_species_threat_notes'
   $field_instances['field_collection_item-field_species_threats-field_species_threat_notes'] = array(
     'bundle' => 'field_species_threats',
@@ -1282,7 +1248,84 @@ function cms_species_field_default_field_instances() {
         'rows' => 1,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance: 'field_collection_item-field_species_threats-field_threats'
+  $field_instances['field_collection_item-field_species_threats-field_threats'] = array(
+    'bundle' => 'field_species_threats',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'i18n_taxonomy',
+        'settings' => array(),
+        'type' => 'i18n_taxonomy_term_reference_link',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_threats',
+    'label' => 'Threats',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 1,
+      ),
+      'type' => 'options_select',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'node-species-body'
+  $field_instances['node-species-body'] = array(
+    'bundle' => 'species',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 53,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'body',
+    'label' => 'Description',
+    'required' => 0,
+    'settings' => array(
+      'display_summary' => 0,
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 19,
     ),
   );
 
@@ -1320,7 +1363,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 37,
+      'weight' => 38,
     ),
   );
 
@@ -1559,7 +1602,7 @@ function cms_species_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 20,
+      'weight' => 21,
     ),
   );
 
@@ -1606,7 +1649,7 @@ function cms_species_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 21,
+      'weight' => 22,
     ),
   );
 
@@ -1651,50 +1694,7 @@ function cms_species_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 24,
-    ),
-  );
-
-  // Exported field_instance: 'node-species-field_species_description'
-  $field_instances['node-species-field_species_description'] = array(
-    'bundle' => 'species',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 52,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_species_description',
-    'label' => 'Description',
-    'required' => 0,
-    'settings' => array(
-      'display_summary' => 1,
-      'entity_translation_sync' => FALSE,
-      'text_processing' => 1,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 20,
-        'summary_rows' => 5,
-      ),
-      'type' => 'text_textarea_with_summary',
-      'weight' => 19,
+      'weight' => 25,
     ),
   );
 
@@ -1736,7 +1736,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 44,
+      'weight' => 45,
     ),
   );
 
@@ -1777,7 +1777,7 @@ function cms_species_field_default_field_instances() {
         'size' => 30,
       ),
       'type' => 'text_textfield',
-      'weight' => 38,
+      'weight' => 39,
     ),
   );
 
@@ -1960,7 +1960,7 @@ function cms_species_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 33,
+      'weight' => 34,
     ),
   );
 
@@ -1998,7 +1998,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 35,
+      'weight' => 36,
     ),
   );
 
@@ -2039,7 +2039,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 25,
+      'weight' => 26,
     ),
   );
 
@@ -2084,7 +2084,7 @@ function cms_species_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 26,
+      'weight' => 27,
     ),
   );
 
@@ -2126,7 +2126,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 40,
+      'weight' => 41,
     ),
   );
 
@@ -2348,7 +2348,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 43,
+      'weight' => 44,
     ),
   );
 
@@ -2393,7 +2393,7 @@ function cms_species_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 27,
+      'weight' => 28,
     ),
   );
 
@@ -2479,7 +2479,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 45,
+      'weight' => 46,
     ),
   );
 
@@ -2518,7 +2518,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 30,
+      'weight' => 31,
     ),
   );
 
@@ -2560,7 +2560,7 @@ function cms_species_field_default_field_instances() {
         'size' => 30,
       ),
       'type' => 'text_textfield',
-      'weight' => 22,
+      'weight' => 23,
     ),
   );
 
@@ -2616,7 +2616,7 @@ function cms_species_field_default_field_instances() {
         'year_range' => '1983:+0',
       ),
       'type' => 'date_select',
-      'weight' => 23,
+      'weight' => 24,
     ),
   );
 
@@ -2655,7 +2655,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 31,
+      'weight' => 32,
     ),
   );
 
@@ -2697,7 +2697,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 42,
+      'weight' => 43,
     ),
   );
 
@@ -2739,7 +2739,7 @@ function cms_species_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 41,
+      'weight' => 42,
     ),
   );
 
@@ -2778,7 +2778,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 28,
+      'weight' => 29,
     ),
   );
 
@@ -2823,7 +2823,7 @@ function cms_species_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 29,
+      'weight' => 30,
     ),
   );
 
@@ -2956,7 +2956,7 @@ function cms_species_field_default_field_instances() {
         'size' => 30,
       ),
       'type' => 'text_textfield',
-      'weight' => 32,
+      'weight' => 33,
     ),
   );
 
@@ -2994,7 +2994,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 36,
+      'weight' => 37,
     ),
   );
 
@@ -3082,7 +3082,7 @@ function cms_species_field_default_field_instances() {
         'size' => 30,
       ),
       'type' => 'text_textfield',
-      'weight' => 39,
+      'weight' => 40,
     ),
   );
 
@@ -3120,7 +3120,7 @@ function cms_species_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 34,
+      'weight' => 35,
     ),
   );
 
@@ -3190,7 +3190,6 @@ function cms_species_field_default_field_instances() {
   t('Synonyms');
   t('Territories');
   t('The link to the corresponding species profile on the IUCN Red List page will be created automatically. Please only overwrite manually in case a wrong link has been inserted.');
-  t('Threat');
   t('Threats');
   t('Trend');
   t('Trend notes');

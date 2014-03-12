@@ -62,7 +62,7 @@ function cms_species_default_services_endpoint() {
       ),
     ),
   );
-  $endpoint->debug = 0;
+  $endpoint->debug = 1;
   $export['ws'] = $endpoint;
 
   return $export;
