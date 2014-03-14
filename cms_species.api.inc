@@ -100,11 +100,13 @@ function cms_species_remote_options($data = '', $species_options = array(), $web
  * @author Dragos Dumitrescu
  */
 
-function api_name_group($node) {
+function api_species_name_group($node) {
     $names = array();
+
     foreach (API_SPECIES::$name as $field_name => $new_key) {
-        if ( !empty($node->{$field_name}[$node->language]) ) {
-            $names[$new_key]= $node->{$field_name}[$node->language][0]['value'];
+        $langcode = API_CMS::get_field_language($node, $field_name);
+        if ( !empty($node->{$field_name}[$langcode]) ) {
+            $names[$new_key]= $node->{$field_name}[$langcode][0]['value'];
         }
     }
     return $names;
@@ -118,18 +120,18 @@ function api_name_group($node) {
  * @author Dragos Dumitrescu
  */
 
-function api_taxonomy_group($node) {
+function api_species_taxonomy_group($node) {
     $taxonomy = array();
 
     foreach (API_SPECIES::$taxonomy['text'] as $field_name => $new_key) {
-        $taxonomy[$new_key] = current(API_SPECIES::get_api_field_values($field_name, $node));
+        $taxonomy[$new_key] = current(API_CMS::get_api_field_values($field_name, $node));
     }
     foreach (API_SPECIES::$taxonomy['texts'] as $field_name => $new_key) {
-        $taxonomy[$new_key] = API_SPECIES::get_api_field_values($field_name, $node);
+        $taxonomy[$new_key] = API_CMS::get_api_field_values($field_name, $node);
     }
 
     foreach (API_SPECIES::$taxonomy['term'] as $field_name => $new_key) {
-        $taxonomy[$new_key] = current(API_SPECIES::get_api_taxonomy_terms($field_name, $node));
+        $taxonomy[$new_key] = API_CMS::api_get_taxonomy_term($field_name, $node);
     }
     return $taxonomy;
 }
@@ -142,21 +144,8 @@ function api_taxonomy_group($node) {
  * @author Dragos Dumitrescu
  */
 
-function api_assessment_info_group($node) {
-
-    foreach ($node->field_species_instruments[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $instruments = entity_load('field_collection_item', array($ids));
-    foreach ($instruments as $instrument) {
-        if (isset($instrument->field_instrument[$node->language][0])) {
-            $instr['instrument'] = API_SPECIES::get_instrument($instrument->field_instrument[$node->language][0]['target_id']);
-            $instr['date_of_entry'] = $instrument->field_species_instrument_date[$node->language][0]['value'];
-            $results []= $instr;
-        }
-    }
-    return $results;
+function api_species_assessment_info_group($node) {
+    return API_CMS::api_get_field_collection_values($node, 'field_species_instruments', API_SPECIES::$species_instruments);
 }
 
 
@@ -167,20 +156,7 @@ function api_assessment_info_group($node) {
  */
 
 function api_species_population($node) {
-    foreach ($node->field_species_pop[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $populations = entity_load('field_collection_item', array($ids));
-    foreach ($populations as $population) {
-        if (isset($population->field_instrument[$node->language][0])) {
-            $results []= array(
-                'instrument'        => API_SPECIES::get_instrument($population->field_instrument[$node->language][0]['target_id']),
-                'name'   => taxonomy_term_load($population->field_species_pop_v[$node->language][0]['tid'])->name,
-            );
-        }
-    }
-    return $results;
+    return API_CMS::api_get_field_collection_values($node, 'field_species_pop', API_SPECIES::$population_fields);
 }
 
 
@@ -191,20 +167,7 @@ function api_species_population($node) {
  */
 
 function api_species_pop_size($node) {
-    foreach ($node->field_species_pop_size[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $populations = entity_load('field_collection_item', array($ids));
-    foreach ($populations as $population) {
-        $result = API_SPECIES::set_api_fields_coll_field(API_SPECIES::$pop_size_fields, $population, $node->language);
-        if (isset($population->field_species_pop_size_r[$node->language][0])) {
-            $result[API_SPECIES::$pop_size_fields['field_species_pop_size_r']] =
-                taxonomy_term_load($population->field_species_pop_size_r[$node->language][0]['tid'])->name;
-        }
-        $results []= $result;
-    }
-    return $results;
+    return API_CMS::api_get_field_collection_values($node, 'field_species_pop_size', API_SPECIES::$pop_size_fields);
 }
 
 
@@ -214,10 +177,10 @@ function api_species_pop_size($node) {
  * @author Dragos Dumitrescu
  */
 
-function api_geographic_range($node) {
+function api_species_geographic_range($node) {
     $result = array();
     $result['range_states'] = api_species_range_states($node);
-    $result['notes'] = current(API_SPECIES::get_api_field_values('field_species_range_states_notes', $node));
+    $result['notes'] = current(API_CMS::get_api_field_values('field_species_range_states_notes', $node));
     return $result;
 }
 
@@ -229,42 +192,11 @@ function api_geographic_range($node) {
  */
 
 function api_species_range_states($node) {
-    foreach ($node->field_species_range_states[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $ranges = entity_load('field_collection_item', array($ids));
-    foreach ($ranges as $range) {
-        $result = API_SPECIES::set_api_fields_coll_field(API_SPECIES::$range_states_fields, $range, $node->language);
-        if (isset($range->field_country[$node->language][0])) {
-            $result[API_SPECIES::$range_states_fields['field_country']] =
-                API_SPECIES::get_country($range->field_country[$node->language][0]['target_id']);
-        }
-        $results []= $result;
-    }
-    return $results;
+    return API_CMS::api_get_field_collection_values($node, 'field_species_range_states', API_SPECIES::$range_states_fields);
 }
 
 function api_species_status_per_country($node) {
-    foreach ($node->field_species_status_per_country[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $countries = entity_load('field_collection_item', array($ids));
-    foreach ($countries as $country) {
-        if (isset($country->field_species_aewa_status[$node->language][0])) {
-            $result[API_SPECIES::$status_country_fields['field_species_aewa_status']] =
-                taxonomy_term_load($country->field_species_aewa_status[$node->language][0]['tid'])->name;
-        }
-
-        if (isset($country->field_country[$node->language][0])) {
-            $result[API_SPECIES::$status_country_fields['field_country']] =
-                node_load($country->field_country[$node->language][0]['target_id'])->title;
-        }
-
-        $results []= $result;
-    }
-    return $results;
+    return API_CMS::api_get_field_collection_values($node, 'field_species_status_per_country', API_SPECIES::$status_country_fields);
 }
 
 
@@ -275,51 +207,7 @@ function api_species_status_per_country($node) {
  */
 
 function api_species_threats($node) {
-    foreach ($node->field_species_threats[$node->language] as $field) {
-        $ids []= $field['value'];
-    }
-    $results = array();
-    $threats = entity_load('field_collection_item', array($ids));
-    foreach ($threats as $threat) {
-        $result = API_SPECIES::set_api_fields_coll_field(API_SPECIES::$threats, $threat, $node->language);
-
-        if (isset($threat->field_threats[$node->language][0])) {
-            $result[API_SPECIES::$threats['field_threats']] =
-                taxonomy_term_load($threat->field_threats[$node->language][0]['tid'])->name;
-        }
-
-        $results []= $result;
-    }
-    return $results;
-}
-
-
-/**
- * Function used in Services views to get some text/date field array of values
- *
- * @param   string  $field_name
- * @param   node    $node
- *
- * @author Dragos Dumitrescu
- */
-
-function api_field_values($field_name, $node) {
-    return API_SPECIES::get_api_field_values($field_name, $node);
-}
-
-
-
-/**
- * Function used in Services views to get some text/date field one value
- *
- * @param   string  $field_name
- * @param   node    $node
- *
- * @author Dragos Dumitrescu
- */
-
-function api_field_single_value($field_name, $node) {
-    return current(API_SPECIES::get_api_field_values($field_name, $node));
+    return API_CMS::api_get_field_collection_values($node, 'field_species_threats', API_SPECIES::$threats);
 }
 
 
@@ -347,6 +235,16 @@ class API_SPECIES {
         "field_species_pop_trend_ref"   => "trend_reference",
         "field_species_pop_trend_n"     => "trend_notes",
     )   ;
+
+    static $population_fields = array(
+        "field_instrument"      => "instrument",
+        "field_species_pop_v"      => "name",
+    );
+
+    static $species_instruments = array(
+        "field_instrument"      => "instrument",
+        "field_species_instrument_date" => "date_of_entry",
+    );
 
     static $range_states_fields = array (
         "field_country" => "range_state",
@@ -397,111 +295,5 @@ class API_SPECIES {
             'field_species_author'          => 'author',
         )
     );
-
-
-    /**
-     * Function to get an array with colelction-field's fields values
-     *
-     * @param   array   $field_names - array of field names for which return the value (to set just the necessary fields (not like revision_id etc.)
-     * @param   string  $field_Collection - field collection name
-     * @param   string  $lang   - node language
-     *
-     * @return  array   array of single values of fields
-     *
-     * @author Dragos Dumitrescu
-     */
-
-    static function set_api_fields_coll_field($field_names, $field_collection, $lang = 'und'){
-        $result = array();
-        foreach ($field_names as $field_key => $field_name) {
-            if (isset($field_collection->{$field_key}[$lang][0]['value'])) {
-                $result[$field_name] = $field_collection->{$field_key}[$lang][0]['value'];
-            }
-        }
-        return $result;
-    }
-
-
-    /**
-     * Function to get an array of term names for a specific field
-     *
-     * @param   string  $field_name - field name
-     * @param   node  $node   - node
-     *
-     * @return  array   array of term names (string)
-     *
-     * @author Dragos Dumitrescu
-     */
-
-    static function get_api_taxonomy_terms($field_name, $node) {
-        $terms = array();
-        if ( !empty($node->{$field_name}[$node->language]) ) {
-            foreach ($node->{$field_name}[$node->language] as $term_ref) {
-                $terms []= taxonomy_term_load($term_ref['tid'])->name;
-            }
-        }
-        return $terms;
-    }
-
-
-
-    /**
-     * Function to get an array of field values for a specific field
-     *
-     * @param   string  $field_name - field name
-     * @param   node  $node   - node
-     *
-     * @return array    array of values
-     *
-     * @author Dragos Dumitrescu
-     */
-
-    static function get_api_field_values($field_name, $node) {
-        $values = array();
-        if ( !empty($node->{$field_name}[$node->language]) ) {
-            foreach ($node->{$field_name}[$node->language] as $value) {
-                $values []= $value['value'];
-            }
-        }
-        return $values;
-    }
-
-
-    /**
-     * Get an instrument array mapped as defined in documentation
-     * @param $nid
-     *
-     * @return array|bool
-     */
-    static function get_instrument($nid) {
-            $node = node_load($nid);
-            if ($node == false) {
-                return FALSE;
-            }
-            $instrument = array();
-            $instrument['instrument'] = $node->title;
-            $instrument['uuid'] = $node->uuid;
-            return $instrument;
-    }
-
-    /**
-     * Get a country array mapped as defined in documentation
-     *
-     * @param $nid
-     *
-     * @return array|bool
-     */
-    static function get_country($nid) {
-        $node = node_load($nid);
-        if ($node == false) {
-            return FALSE;
-        }
-        $country = array();
-        $country['name'] = $node->title;
-        $country['uuid'] = $node->uuid;
-        $country['iso3l'] = $node->field_country_iso3[$node->language][0]['value'];
-        $country['iso2l'] = $node->field_country_iso2[$node->language][0]['value'];
-        return $country;
-    }
 
 }
