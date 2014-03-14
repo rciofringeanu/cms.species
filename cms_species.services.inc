@@ -37,6 +37,20 @@ function cms_species_default_services_endpoint() {
     ),
   );
   $endpoint->resources = array(
+    'countries' => array(
+      'operations' => array(
+        'index' => array(
+          'enabled' => '1',
+        ),
+      ),
+    ),
+    'country' => array(
+      'operations' => array(
+        'index' => array(
+          'enabled' => '1',
+        ),
+      ),
+    ),
     'node' => array(
       'operations' => array(
         'retrieve' => array(
