@@ -61,6 +61,20 @@ function cms_species_default_services_endpoint() {
         ),
       ),
     ),
+    'projects' => array(
+      'operations' => array(
+        'index' => array(
+          'enabled' => '1',
+        ),
+      ),
+    ),
+    'publications' => array(
+      'operations' => array(
+        'index' => array(
+          'enabled' => '1',
+        ),
+      ),
+    ),
     'species' => array(
       'operations' => array(
         'index' => array(
@@ -69,6 +83,13 @@ function cms_species_default_services_endpoint() {
       ),
     ),
     'species_node' => array(
+      'operations' => array(
+        'index' => array(
+          'enabled' => '1',
+        ),
+      ),
+    ),
+    'working-groups' => array(
       'operations' => array(
         'index' => array(
           'enabled' => '1',
