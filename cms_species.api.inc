@@ -196,7 +196,9 @@ function api_species_range_states($node) {
 }
 
 function api_species_status_per_country($node) {
-    return API_CMS::api_get_field_collection_values($node, 'field_species_status_per_country', API_SPECIES::$status_country_fields);
+    $result = array();
+    $result['range_states'] = API_CMS::api_get_field_collection_values($node, 'field_species_status_per_country', API_SPECIES::$status_country_fields);
+    return $result;
 }
 
 
