@@ -253,7 +253,7 @@ class API_SPECIES {
     );
 
     static $status_country_fields = array (
-        "field_country" => "country",
+        "field_country" => "range_state",
         "field_species_aewa_status" => "status",
     );
 
